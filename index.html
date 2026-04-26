@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Telegram Mini App</title>
+
+  <!-- Telegram Web App SDK - မဖြစ်မနေ ထည့်ရမည် -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+Myanmar:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════
+       CSS Variables & Reset
+    ═══════════════════════════════════════ */
+    :root {
+      --bg-primary:    #0a0e1a;
+      --bg-card:       #111827;
+      --bg-glass:      rgba(255,255,255,0.04);
+      --accent-blue:   #3b82f6;
+      --accent-cyan:   #06b6d4;
+      --accent-purple: #8b5cf6;
+      --text-primary:  #f1f5f9;
+      --text-muted:    #64748b;
+      --text-dim:      #334155;
+      --border:        rgba(255,255,255,0.08);
+      --success:       #10b981;
+      --warning:       #f59e0b;
+      --radius:        16px;
+      --font-main:     'Noto Sans Myanmar', sans-serif;
+      --font-mono:     'Space Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glowing orbs */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -150px;
+      right: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%       { transform: translate(-30px, 30px) scale(1.05); }
+    }
+
+    /* ═══════════════════════════════════════
+       Layout
+    ═══════════════════════════════════════ */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ═══════════════════════════════════════
+       Header
+    ═══════════════════════════════════════ */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 0 8px;
+      opacity: 0;
+      transform: translateY(-16px);
+      animation: slideDown 0.5s ease forwards 0.1s;
+    }
+
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .header-text .app-name {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-text .app-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════
+       Loading Screen
+    ═══════════════════════════════════════ */
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 1000;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    #loadingScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-ring {
+      width: 60px;
+      height: 60px;
+      border: 2px solid var(--border);
+      border-top: 2px solid var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* ═══════════════════════════════════════
+       User Profile Card
+    ═══════════════════════════════════════ */
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: slideUp 0.5s ease forwards 0.3s;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-purple));
+    }
+
+    .profile-card::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(59,130,246,0.06), transparent 70%);
+      pointer-events: none;
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      border: 2px solid rgba(59,130,246,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-username {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-verified {
+      background: rgba(16,185,129,0.12);
+      color: var(--success);
+      border: 1px solid rgba(16,185,129,0.2);
+    }
+
+    .badge-premium {
+      background: rgba(245,158,11,0.12);
+      color: var(--warning);
+      border: 1px solid rgba(245,158,11,0.2);
+    }
+
+    /* Info Rows */
+    .info-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-label .icon {
+      font-size: 14px;
+    }
+
+    .info-value {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-primary);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .info-value.id-value {
+      color: var(--accent-blue);
+    }
+
+    /* ═══════════════════════════════════════
+       Status Card
+    ═══════════════════════════════════════ */
+    .status-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: slideUp 0.5s ease forwards 0.45s;
+    }
+
+    .status-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-green  { background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
+    .dot-blue   { background: var(--accent-blue); }
+    .dot-yellow { background: var(--warning); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    .status-item-text { color: var(--text-primary); }
+    .status-item-sub  { font-size: 11px; color: var(--text-muted); margin-left: auto; font-family: var(--font-mono); }
+
+    /* ═══════════════════════════════════════
+       Action Buttons
+    ═══════════════════════════════════════ */
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: slideUp 0.5s ease forwards 0.6s;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-family: var(--font-main);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: white;
+      grid-column: 1 / -1;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); opacity: 1; }
+
+    .btn-secondary {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+
+    /* ═══════════════════════════════════════
+       Error State
+    ═══════════════════════════════════════ */
+    .error-card {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-card.show { display: block; }
+    .error-icon { font-size: 40px; margin-bottom: 12px; }
+    .error-title { font-size: 16px; font-weight: 600; color: #ef4444; margin-bottom: 8px; }
+    .error-msg   { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ═══════════════════════════════════════
+       Footer
+    ═══════════════════════════════════════ */
+    .footer {
+      text-align: center;
+      padding-top: 4px;
+      opacity: 0;
+      animation: slideUp 0.5s ease forwards 0.7s;
+    }
+
+    .footer p {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+
+    .footer span {
+      color: var(--accent-blue);
+      font-family: var(--font-mono);
+    }
+
+    /* ═══════════════════════════════════════
+       Animations
+    ═══════════════════════════════════════ */
+    @keyframes slideDown {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loadingScreen">
+    <div class="loader-ring"></div>
+    <p class="loader-text">Loading...</p>
+  </div>
+
+  <!-- Main App -->
+  <div class="container" id="appContainer" style="display:none;">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-logo">⚡</div>
+      <div class="header-text">
+        <div class="app-name">Mini App</div>
+        <div class="app-sub">Telegram Web Application</div>
+      </div>
+    </div>
+
+    <!-- Error Card (Telegram မဟုတ်ဘဲ ဖွင့်ရင်) -->
+    <div class="error-card" id="errorCard">
+      <div class="error-icon">⚠️</div>
+      <div class="error-title">Telegram ထဲမှသာ ဖွင့်ပါ</div>
+      <div class="error-msg">ဒီ App ကို Telegram Mini App အနေနဲ့သာ ဖွင့်နိုင်ပါသည်။<br>Bot ထဲကနေ button ကို နှိပ်ပြီး ဝင်ပါ။</div>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card" id="profileCard">
+      <div class="profile-top">
+        <div class="avatar" id="avatarEl">?</div>
+        <div class="profile-info">
+          <div class="profile-name" id="nameEl">Loading...</div>
+          <div class="profile-username" id="usernameEl">@—</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge badge-verified">✓ Verified</span>
+            <span class="badge badge-premium" id="premiumBadge" style="display:none;">⭐ Premium</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-row">
+          <span class="info-label"><span class="icon">🆔</span> Telegram ID</span>
+          <span class="info-value id-value" id="idEl">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label"><span class="icon">🌐</span> Language</span>
+          <span class="info-value" id="langEl">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label"><span class="icon">📱</span> Platform</span>
+          <span class="info-value" id="platformEl">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label"><span class="icon">🎨</span> Theme</span>
+          <span class="info-value" id="themeEl">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Card -->
+    <div class="status-card">
+      <div class="status-title">System Status</div>
+      <div class="status-list">
+        <div class="status-item">
+          <div class="status-dot dot-green"></div>
+          <span class="status-item-text">Telegram SDK</span>
+          <span class="status-item-sub" id="sdkStatus">connected</span>
+        </div>
+        <div class="status-item">
+          <div class="status-dot dot-blue"></div>
+          <span class="status-item-text">User Authentication</span>
+          <span class="status-item-sub" id="authStatus">checking...</span>
+        </div>
+        <div class="status-item">
+          <div class="status-dot dot-yellow"></div>
+          <span class="status-item-text">Backend API</span>
+          <span class="status-item-sub" id="apiStatus">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+      <button class="btn btn-primary" onclick="validateWithBackend()">
+        🔐 Backend နဲ့ Verify လုပ်မည်
+      </button>
+      <button class="btn btn-secondary" onclick="copyUserData()">
+        📋 Copy Data
+      </button>
+      <button class="btn btn-secondary" onclick="window.Telegram.WebApp.close()">
+        ✕ ပိတ်မည်
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Built with <span>Telegram Mini App SDK</span></p>
+    </div>
+
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════
+    //  Backend URL - သင့် Render URL ထည့်ပါ
+    // ═══════════════════════════════════════════════════
+    const BACKEND_URL = 'https://your-backend.onrender.com'; // ← ဒီနေရာ ပြောင်းပါ
+
+    // ═══════════════════════════════════════════════════
+    //  Telegram Web App Initialize
+    // ═══════════════════════════════════════════════════
+    const tg = window.Telegram?.WebApp;
+    let userData = null;
+
+    function init() {
+      if (!tg) {
+        showError();
+        return;
+      }
+
+      // Telegram Web App ကို expand (full screen) လုပ်မယ်
+      tg.expand();
+      tg.ready();
+
+      // Telegram theme colors ကို CSS variable တွေနဲ့ sync လုပ်မယ်
+      applyTelegramTheme();
+
+      // User data ရယူမယ်
+      loadUserData();
+    }
+
+    function applyTelegramTheme() {
+      if (tg.colorScheme === 'light') {
+        // Light theme ဖြစ်ရင် color adjust လုပ်နိုင်
+        // ယခု dark theme ကို ဆက်သုံးတယ်
+      }
+      document.getElementById('themeEl').textContent = tg.colorScheme || 'dark';
+    }
+
+    function loadUserData() {
+      // initDataUnsafe က user info တွေပါတဲ့ object
+      // unsafe ဆိုတာ client-side မှာ validate မလုပ်ထားတာ
+      // real verification အတွက် backend ကို ပို့ရမယ်
+      const initData = tg.initDataUnsafe;
+
+      if (!initData || !initData.user) {
+        // Telegram ထဲကနေ မဖွင့်ရင် ဒီမှာ user မရှိဘူး
+        showError();
+        return;
+      }
+
+      const user = initData.user;
+      userData = user;
+
+      // UI ထဲ user data ထည့်မယ်
+      displayUserData(user);
+
+      // Loading screen ဖျောက်မယ်
+      setTimeout(hideLoading, 800);
+
+      // Auth status update
+      document.getElementById('authStatus').textContent = 'authenticated';
+    }
+
+    function displayUserData(user) {
+      // Avatar - name ရဲ့ first letter ကို ထားမယ်
+      const initials = (user.first_name || 'U').charAt(0).toUpperCase();
+      document.getElementById('avatarEl').textContent = initials;
+
+      // Full name
+      const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ');
+      document.getElementById('nameEl').textContent = fullName || 'Unknown User';
+
+      // Username
+      document.getElementById('usernameEl').textContent =
+        user.username ? `@${user.username}` : 'username မရှိပါ';
+
+      // ID
+      document.getElementById('idEl').textContent = user.id || '—';
+
+      // Language
+      const langMap = { 'my': '🇲🇲 မြန်မာ', 'en': '🇺🇸 English', 'zh': '🇨🇳 Chinese' };
+      document.getElementById('langEl').textContent =
+        langMap[user.language_code] || user.language_code || '—';
+
+      // Platform
+      document.getElementById('platformEl').textContent = tg.platform || '—';
+
+      // Premium badge
+      if (user.is_premium) {
+        document.getElementById('premiumBadge').style.display = 'inline-flex';
+      }
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  Backend Validation
+    //  initData ကို Backend ကို ပို့ပြီး စစ်ဆေးတယ်
+    // ═══════════════════════════════════════════════════
+    async function validateWithBackend() {
+      const initData = tg.initData;
+
+      if (!initData) {
+        alert('initData မရှိပါ - Telegram ထဲကနေ ဝင်ပါ');
+        return;
+      }
+
+      document.getElementById('apiStatus').textContent = 'connecting...';
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/validate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData })
+        });
+
+        const result = await response.json();
+
+        if (result.valid) {
+          document.getElementById('apiStatus').textContent = 'verified ✓';
+          tg.showPopup({
+            title: '✅ Verified',
+            message: `Backend မှာ Successfully verified ဖြစ်ပါပြီ!\n\nUser: ${result.user?.username || result.user?.first_name}`,
+            buttons: [{ type: 'ok', text: 'OK' }]
+          });
+        } else {
+          document.getElementById('apiStatus').textContent = 'failed ✗';
+          tg.showAlert('❌ Verification failed: ' + result.error);
+        }
+
+      } catch (err) {
+        document.getElementById('apiStatus').textContent = 'error';
+        tg.showAlert('🔴 Backend ချိတ်ဆက်မှု မရပါ:\n' + err.message);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  Utility Functions
+    // ═══════════════════════════════════════════════════
+    function copyUserData() {
+      if (!userData) return;
+      const text = JSON.stringify(userData, null, 2);
+      navigator.clipboard.writeText(text)
+        .then(() => tg.showAlert('✅ User data copied to clipboard!'))
+        .catch(() => tg.showAlert('Copy မရပါ'));
+    }
+
+    function showError() {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('appContainer').style.display = 'flex';
+      document.getElementById('errorCard').classList.add('show');
+      document.getElementById('profileCard').style.display = 'none';
+    }
+
+    function hideLoading() {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('appContainer').style.display = 'flex';
+    }
+
+    // App start
+    window.addEventListener('load', init);
+  </script>
+
+</body>
+</html>
