@@ -3,453 +3,694 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Telegram Mini App</title>
-
-  <!-- Telegram Web App SDK -->
+  <title>Best Buy Mini App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+Myanmar:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ========================================
+   BASE RESET & VARIABLES
+======================================== */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  <style>
-    :root {
-      --bg-primary:    #0a0e1a;
-      --bg-card:       #111827;
-      --bg-glass:      rgba(255,255,255,0.04);
-      --accent-blue:   #3b82f6;
-      --accent-cyan:   #06b6d4;
-      --accent-purple: #8b5cf6;
-      --text-primary:  #f1f5f9;
-      --text-muted:    #64748b;
-      --text-dim:      #334155;
-      --border:        rgba(255,255,255,0.08);
-      --success:       #10b981;
-      --warning:       #f59e0b;
-      --radius:        16px;
-      --font-main:     'Noto Sans Myanmar', sans-serif;
-      --font-mono:     'Space Mono', monospace;
-    }
+:root {
+  --pink-light:   #fce4ec;
+  --pink-mid:     #f8bbd0;
+  --pink-accent:  #e91e63;
+  --pink-deep:    #c2185b;
+  --yellow-bb:    #FFE000;
+  --blue-bb:      #003087;
+  --white:        #ffffff;
+  --text-dark:    #1a1a2e;
+  --text-mid:     #555577;
+  --text-soft:    #9999aa;
+  --shadow-card:  0 8px 32px rgba(0,0,0,0.08);
+  --radius-lg:    20px;
+  --radius-md:    14px;
+  --radius-sm:    10px;
+  --nav-height:   70px;
+}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Poppins', 'Noto Sans Myanmar', sans-serif;
+  background: var(--pink-light);
+}
 
-    body {
-      font-family: var(--font-main);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
+/* ========================================
+   APP WRAPPER
+======================================== */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--pink-light);
+  position: relative;
+  overflow: hidden;
+}
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
+/* ========================================
+   HERO BANNER
+======================================== */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 215px;
+  background: linear-gradient(135deg, #1a0533 0%, #2d0b5e 30%, #0a0a2e 60%, #1a0040 100%);
+  overflow: hidden;
+  flex-shrink: 0;
+}
 
-    body::after {
-      content: '';
-      position: fixed;
-      top: -150px;
-      right: -150px;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-      animation: orbFloat 8s ease-in-out infinite;
-    }
+/* Keyboard row lines */
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 8px; left: 0; right: 0; height: 36px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 17px,
+    rgba(255,50,200,0.55) 17px, rgba(255,50,200,0.55) 19px
+  );
+  filter: blur(1px);
+}
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  top: 52px; left: 0; right: 0; height: 28px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 24px,
+    rgba(100,80,255,0.45) 24px, rgba(100,80,255,0.45) 26px
+  );
+  filter: blur(1px);
+}
 
-    @keyframes orbFloat {
-      0%,100% { transform: translate(0,0) scale(1); }
-      50%      { transform: translate(-30px,30px) scale(1.05); }
-    }
+.hero-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 22px, rgba(255,0,180,0.05) 22px, rgba(255,0,180,0.05) 23px),
+    repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(100,0,255,0.05) 28px, rgba(100,0,255,0.05) 29px);
+}
 
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 24px 20px 40px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+.hero-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 60% 50%, rgba(120,0,220,0.35) 0%, transparent 70%);
+}
 
-    /* ── Loading ── */
-    #loadingScreen {
-      position: fixed;
-      inset: 0;
-      background: var(--bg-primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      z-index: 1000;
-      transition: opacity .4s ease, visibility .4s ease;
-    }
-    #loadingScreen.hidden { opacity: 0; visibility: hidden; }
+/* Phone mockup */
+.hero-phone-wrap {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+}
 
-    .loader-ring {
-      width: 60px; height: 60px;
-      border: 2px solid var(--border);
-      border-top: 2px solid var(--accent-blue);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+.hero-phone {
+  width: 185px; height: 145px;
+  background: linear-gradient(145deg, #efefef 0%, #ffffff 40%, #e5e5e5 100%);
+  border-radius: 18px 18px 0 0;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 -10px 45px rgba(0,0,0,0.55), 0 0 0 2px rgba(255,255,255,0.12);
+  position: relative; overflow: hidden;
+}
 
-    .loader-text { font-size: 13px; color: var(--text-muted); letter-spacing: 1px; }
+.hero-phone::before {
+  content: '';
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 58px; height: 8px;
+  background: #2a2a2a;
+  border-radius: 0 0 8px 8px;
+}
 
-    /* ── Header ── */
-    .header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 0 8px;
-      opacity: 0; transform: translateY(-16px);
-      animation: slideDown .5s ease forwards .1s;
-    }
-    .header-logo {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-    }
-    .header-text .app-name { font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan); letter-spacing: 2px; text-transform: uppercase; }
-    .header-text .app-sub  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+/* Best Buy logo */
+.bb-tag {
+  background: var(--yellow-bb);
+  width: 104px; height: 74px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.22);
+}
+.bb-tag::before {
+  content: '';
+  position: absolute; top: -7px; left: 12px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.18);
+}
+.bb-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 21px; font-weight: 800;
+  color: var(--blue-bb);
+  text-align: center; line-height: 1.1;
+  letter-spacing: -0.5px;
+}
 
-    /* ── Profile Card ── */
-    .profile-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 24px;
-      position: relative; overflow: hidden;
-      opacity: 0; transform: translateY(24px);
-      animation: slideUp .5s ease forwards .3s;
-    }
-    .profile-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-purple));
-    }
-    .profile-card::after {
-      content: '';
-      position: absolute; top: -60px; left: -60px;
-      width: 180px; height: 180px;
-      background: radial-gradient(circle, rgba(59,130,246,.06), transparent 70%);
-      pointer-events: none;
-    }
+/* User chip */
+.user-chip {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  padding: 6px 13px;
+  border-radius: 50px;
+  font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  z-index: 10;
+}
+.user-chip i { font-size: 14px; color: var(--yellow-bb); }
 
-    .profile-top { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+/* ========================================
+   SCROLLABLE CONTENT
+======================================== */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px calc(var(--nav-height) + 16px);
+  display: flex; flex-direction: column; gap: 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll-content::-webkit-scrollbar { display: none; }
 
-    .avatar {
-      width: 68px; height: 68px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-weight: 700; color: white;
-      flex-shrink: 0; border: 2px solid rgba(59,130,246,.3); position: relative; z-index: 1;
-    }
+/* ========================================
+   NOTIFICATION BAR
+======================================== */
+.notification-bar {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--pink-accent);
+  animation: fadeUp 0.4s ease both;
+}
 
-    .profile-info { flex: 1; min-width: 0; }
-    .profile-name { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .profile-username { font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan); margin-bottom: 8px; }
+.notif-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--pink-accent), #ff6090);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 15px; flex-shrink: 0;
+  animation: bellRing 2s ease 1.2s 1;
+}
 
-    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: .5px; }
-    .badge-verified { background: rgba(16,185,129,.12); color: var(--success); border: 1px solid rgba(16,185,129,.2); }
-    .badge-premium  { background: rgba(245,158,11,.12); color: var(--warning); border: 1px solid rgba(245,158,11,.2); }
+@keyframes bellRing {
+  0%,100%{transform:rotate(0)}
+  20%{transform:rotate(-15deg)}
+  40%{transform:rotate(15deg)}
+  60%{transform:rotate(-10deg)}
+  80%{transform:rotate(10deg)}
+}
 
-    .info-grid { display: flex; flex-direction: column; gap: 12px; }
-    .info-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 14px;
-      background: var(--bg-glass); border: 1px solid var(--border); border-radius: 10px;
-    }
-    .info-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-    .info-label .icon { font-size: 14px; }
-    .info-value { font-family: var(--font-mono); font-size: 13px; color: var(--text-primary); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
-    .info-value.id-value { color: var(--accent-blue); }
+.notif-text { font-size: 13px; color: var(--text-dark); line-height: 1.4; }
+.notif-text strong { color: var(--pink-accent); font-weight: 700; }
 
-    /* ── Status Card ── */
-    .status-card {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 20px 24px;
-      opacity: 0; transform: translateY(24px);
-      animation: slideUp .5s ease forwards .45s;
-    }
-    .status-title {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
-      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
-    }
-    .status-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .status-list { display: flex; flex-direction: column; gap: 10px; }
-    .status-item { display: flex; align-items: center; gap: 12px; font-size: 13px; }
-    .status-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot-green  { background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
-    .dot-blue   { background: var(--accent-blue); }
-    .dot-yellow { background: var(--warning); }
-    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.6; transform:scale(.85); } }
-    .status-item-text { color: var(--text-primary); }
-    .status-item-sub  { font-size: 11px; color: var(--text-muted); margin-left: auto; font-family: var(--font-mono); }
+/* ========================================
+   MENU CARD
+======================================== */
+.menu-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 20px 14px;
+  box-shadow: var(--shadow-card);
+  animation: fadeUp 0.45s ease 0.08s both;
+}
 
-    /* ── Buttons ── */
-    .actions {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-      opacity: 0; transform: translateY(24px);
-      animation: slideUp .5s ease forwards .6s;
-    }
-    .btn {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 14px 16px; border-radius: 12px;
-      font-family: var(--font-main); font-size: 13px; font-weight: 600;
-      cursor: pointer; transition: all .2s ease; border: none; text-decoration: none;
-    }
-    .btn-primary { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: white; grid-column: 1 / -1; }
-    .btn-primary:hover  { opacity: .9; transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); opacity: 1; }
-    .btn-secondary { background: var(--bg-glass); border: 1px solid var(--border); color: var(--text-primary); }
-    .btn-secondary:hover { background: rgba(255,255,255,.08); }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
 
-    /* ── Error ── */
-    .error-card {
-      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.2);
-      border-radius: var(--radius); padding: 24px; text-align: center; display: none;
-    }
-    .error-card.show { display: block; }
-    .error-icon  { font-size: 40px; margin-bottom: 12px; }
-    .error-title { font-size: 16px; font-weight: 600; color: #ef4444; margin-bottom: 8px; }
-    .error-msg   { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.menu-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  padding: 14px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.18s ease;
+  position: relative; overflow: hidden;
+}
 
-    /* ── Footer ── */
-    .footer { text-align: center; padding-top: 4px; opacity: 0; animation: slideUp .5s ease forwards .7s; }
-    .footer p   { font-size: 11px; color: var(--text-dim); letter-spacing: .5px; }
-    .footer span { color: var(--accent-blue); font-family: var(--font-mono); }
+.menu-item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--pink-light), var(--pink-mid));
+  opacity: 0;
+  transition: opacity 0.18s;
+  border-radius: var(--radius-sm);
+}
+.menu-item:active::after { opacity: 1; }
+.menu-item:active { transform: scale(0.93); }
 
-    @keyframes slideDown { to { opacity:1; transform:translateY(0); } }
-    @keyframes slideUp   { to { opacity:1; transform:translateY(0); } }
-  </style>
+.menu-icon-wrap {
+  width: 54px; height: 54px;
+  border-radius: 15px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 23px;
+  position: relative; z-index: 1;
+  transition: transform 0.18s ease;
+}
+.menu-item:hover .menu-icon-wrap { transform: translateY(-2px); }
+
+/* Individual icon colors */
+.menu-item:nth-child(1) .menu-icon-wrap { color:#e91e63; background:linear-gradient(135deg,#fff5f8,#ffe0ec); box-shadow:0 4px 14px rgba(233,30,99,0.18); }
+.menu-item:nth-child(2) .menu-icon-wrap { color:#f59e0b; background:linear-gradient(135deg,#fffbeb,#fef3c7); box-shadow:0 4px 14px rgba(245,158,11,0.18); }
+.menu-item:nth-child(3) .menu-icon-wrap { color:#10b981; background:linear-gradient(135deg,#ecfdf5,#d1fae5); box-shadow:0 4px 14px rgba(16,185,129,0.18); }
+.menu-item:nth-child(4) .menu-icon-wrap { color:#3b82f6; background:linear-gradient(135deg,#eff6ff,#dbeafe); box-shadow:0 4px 14px rgba(59,130,246,0.18); }
+.menu-item:nth-child(5) .menu-icon-wrap { color:#8b5cf6; background:linear-gradient(135deg,#f5f3ff,#ede9fe); box-shadow:0 4px 14px rgba(139,92,246,0.18); }
+.menu-item:nth-child(6) .menu-icon-wrap { color:#ef4444; background:linear-gradient(135deg,#fef2f2,#fee2e2); box-shadow:0 4px 14px rgba(239,68,68,0.18); }
+
+.menu-label {
+  font-size: 11.5px; font-weight: 600;
+  color: var(--text-dark); text-align: center;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.3; position: relative; z-index: 1;
+}
+
+/* ========================================
+   BALANCE CARD
+======================================== */
+.balance-card {
+  background: linear-gradient(135deg, var(--pink-accent) 0%, #c2185b 100%);
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(233,30,99,0.35);
+  animation: fadeUp 0.5s ease 0.16s both;
+  position: relative; overflow: hidden;
+}
+.balance-card::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:120px; height:120px; border-radius:50%;
+  background:rgba(255,255,255,0.1);
+}
+.balance-card::after {
+  content:''; position:absolute; bottom:-20px; left:20px;
+  width:80px; height:80px; border-radius:50%;
+  background:rgba(255,255,255,0.07);
+}
+.balance-label {
+  font-size: 12px; opacity: 0.85;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  font-weight: 500; letter-spacing: 0.5px;
+}
+.balance-amount {
+  font-size: 36px; font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  margin: 4px 0 8px; letter-spacing: -1px;
+  position: relative; z-index: 1;
+}
+.balance-sub {
+  font-size: 12px; opacity: 0.75;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  position: relative; z-index: 1;
+}
+.balance-sub span { font-weight: 700; color: var(--yellow-bb); }
+
+/* ========================================
+   COMMISSION HISTORY CARD
+======================================== */
+.history-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px;
+  box-shadow: var(--shadow-card);
+  animation: fadeUp 0.55s ease 0.22s both;
+}
+.history-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-dark); margin-bottom: 12px;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+}
+.history-title i { color: var(--pink-accent); }
+
+.history-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f8;
+}
+.history-item:last-child { border-bottom: none; }
+
+.history-left { display: flex; align-items: center; gap: 10px; }
+.history-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--pink-accent); flex-shrink: 0;
+}
+.history-info { display: flex; flex-direction: column; }
+.history-id { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+.history-date { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
+.history-amount { font-size: 14px; font-weight: 700; color: #10b981; }
+
+/* ========================================
+   BOTTOM NAVIGATION
+======================================== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  height: var(--nav-height);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: space-around;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.10);
+  border-top: 1px solid rgba(233,30,99,0.08);
+  z-index: 100;
+}
+
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  padding: 10px 0; cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-soft); position: relative;
+}
+.nav-item i { font-size: 20px; transition: all 0.2s ease; }
+.nav-item span { font-size: 10px; font-weight: 600; font-family: 'Poppins', sans-serif; }
+
+.nav-item.active { color: var(--pink-accent); }
+.nav-item.active i { transform: translateY(-2px); }
+.nav-item.active::after {
+  content: ''; position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 32px; height: 3px;
+  background: var(--pink-accent);
+  border-radius: 0 0 4px 4px;
+}
+.nav-item:active { transform: scale(0.88); }
+
+/* ========================================
+   TOAST
+======================================== */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-height) + 16px);
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(26,26,46,0.93);
+  color: white; padding: 11px 22px;
+  border-radius: 50px; font-size: 13px;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  z-index: 999; opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap; pointer-events: none;
+  max-width: 88vw;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* iOS safe area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+  }
+  .scroll-content {
+    padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 16px);
+  }
+}
+</style>
 </head>
-<body>
 
-  <!-- Loading -->
-  <div id="loadingScreen">
-    <div class="loader-ring"></div>
-    <p class="loader-text">Loading...</p>
+<body>
+<div class="app-wrapper">
+
+  <!-- ===== HERO BANNER ===== -->
+  <div class="hero-banner">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-phone-wrap">
+      <div class="hero-phone">
+        <div class="bb-tag">
+          <span class="bb-text">BEST<br>BUY</span>
+        </div>
+      </div>
+    </div>
+    <div class="user-chip">
+      <i class="fa-solid fa-circle-user"></i>
+      <span id="username-display">Loading...</span>
+    </div>
   </div>
 
-  <!-- App -->
-  <div class="container" id="appContainer" style="display:none;">
+  <!-- ===== SCROLLABLE CONTENT ===== -->
+  <div class="scroll-content">
 
-    <div class="header">
-      <div class="header-logo">⚡</div>
-      <div class="header-text">
-        <div class="app-name">Mini App</div>
-        <div class="app-sub">Telegram Web Application</div>
+    <!-- Notification Bar -->
+    <div class="notification-bar">
+      <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
+      <p class="notif-text">[****6594] Received commission <strong>$9,269.00</strong></p>
+    </div>
+
+    <!-- Main Menu Grid -->
+    <div class="menu-card">
+      <div class="menu-grid">
+
+        <div class="menu-item" onclick="menuAction('withdraw')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-money-bill-transfer"></i></div>
+          <span class="menu-label">ပိုက်ဆံထုတ်ရန်</span>
+        </div>
+
+        <div class="menu-item" onclick="menuAction('wallet')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-wallet"></i></div>
+          <span class="menu-label">လက်ကျန်ငွေ</span>
+        </div>
+
+        <div class="menu-item" onclick="menuAction('invite')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-user-plus"></i></div>
+          <span class="menu-label">လူဖိတ်ရန်</span>
+        </div>
+
+        <div class="menu-item" onclick="menuAction('topup')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-circle-plus"></i></div>
+          <span class="menu-label">ပိုက်ဆံထည့်ရန်</span>
+        </div>
+
+        <div class="menu-item" onclick="menuAction('rule')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="menu-label">စည်းကမ်း</span>
+        </div>
+
+        <div class="menu-item" onclick="menuAction('platform')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-building-columns"></i></div>
+          <span class="menu-label">Platform</span>
+        </div>
+
       </div>
     </div>
 
-    <!-- Error (Telegram ထဲကမဟုတ်ဘဲ ဖွင့်ရင်) -->
-    <div class="error-card" id="errorCard">
-      <div class="error-icon">⚠️</div>
-      <div class="error-title">Telegram ထဲမှသာ ဖွင့်ပါ</div>
-      <div class="error-msg">ဒီ App ကို Telegram Mini App အနေနဲ့သာ ဖွင့်နိုင်ပါသည်။<br>Bot ထဲကနေ button ကို နှိပ်ပြီး ဝင်ပါ။</div>
+    <!-- Balance Card -->
+    <div class="balance-card">
+      <div class="balance-label">စုစုပေါင်း လက်ကျန်ငွေ</div>
+      <div class="balance-amount">$0.00</div>
+      <div class="balance-sub">Account ID: <span id="account-id">----</span></div>
     </div>
 
-    <!-- Profile Card -->
-    <div class="profile-card" id="profileCard">
-      <div class="profile-top">
-        <div class="avatar" id="avatarEl">?</div>
-        <div class="profile-info">
-          <div class="profile-name" id="nameEl">Loading...</div>
-          <div class="profile-username" id="usernameEl">@—</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <span class="badge badge-verified">✓ Verified</span>
-            <span class="badge badge-premium" id="premiumBadge" style="display:none;">⭐ Premium</span>
+    <!-- Commission History -->
+    <div class="history-card">
+      <div class="history-title">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Commission မှတ်တမ်း
+      </div>
+
+      <div class="history-item">
+        <div class="history-left">
+          <div class="history-dot"></div>
+          <div class="history-info">
+            <span class="history-id">[****6594]</span>
+            <span class="history-date">2024-12-01 · 14:32</span>
           </div>
         </div>
+        <span class="history-amount">+$9,269.00</span>
       </div>
-      <div class="info-grid">
-        <div class="info-row">
-          <span class="info-label"><span class="icon">🆔</span> Telegram ID</span>
-          <span class="info-value id-value" id="idEl">—</span>
+
+      <div class="history-item">
+        <div class="history-left">
+          <div class="history-dot" style="background:#3b82f6"></div>
+          <div class="history-info">
+            <span class="history-id">[****6594]</span>
+            <span class="history-date">2024-11-28 · 09:15</span>
+          </div>
         </div>
-        <div class="info-row">
-          <span class="info-label"><span class="icon">🌐</span> Language</span>
-          <span class="info-value" id="langEl">—</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label"><span class="icon">📱</span> Platform</span>
-          <span class="info-value" id="platformEl">—</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label"><span class="icon">🎨</span> Theme</span>
-          <span class="info-value" id="themeEl">—</span>
-        </div>
+        <span class="history-amount">+$4,150.00</span>
       </div>
-    </div>
 
-    <!-- Status Card -->
-    <div class="status-card">
-      <div class="status-title">System Status</div>
-      <div class="status-list">
-        <div class="status-item">
-          <div class="status-dot dot-green"></div>
-          <span class="status-item-text">Telegram SDK</span>
-          <span class="status-item-sub" id="sdkStatus">connected</span>
+      <div class="history-item">
+        <div class="history-left">
+          <div class="history-dot" style="background:#8b5cf6"></div>
+          <div class="history-info">
+            <span class="history-id">[****6594]</span>
+            <span class="history-date">2024-11-20 · 17:44</span>
+          </div>
         </div>
-        <div class="status-item">
-          <div class="status-dot dot-blue"></div>
-          <span class="status-item-text">User Authentication</span>
-          <span class="status-item-sub" id="authStatus">checking...</span>
-        </div>
-        <div class="status-item">
-          <div class="status-dot dot-yellow"></div>
-          <span class="status-item-text">Backend API</span>
-          <span class="status-item-sub" id="apiStatus">—</span>
-        </div>
+        <span class="history-amount">+$2,800.00</span>
       </div>
+
     </div>
 
-    <!-- Actions -->
-    <div class="actions">
-      <button class="btn btn-primary" onclick="validateWithBackend()">
-        🔐 Backend နဲ့ Verify လုပ်မည်
-      </button>
-      <button class="btn btn-secondary" onclick="copyUserData()">
-        📋 Copy Data
-      </button>
-      <button class="btn btn-secondary" onclick="window.Telegram.WebApp.close()">
-        ✕ ပိတ်မည်
-      </button>
+  </div><!-- end scroll-content -->
+
+  <!-- ===== BOTTOM NAVIGATION ===== -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="navAction(this)">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
     </div>
-
-    <div class="footer">
-      <p>Built with <span>Telegram Mini App SDK</span></p>
+    <div class="nav-item" onclick="navAction(this)">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span>Cart</span>
     </div>
+    <div class="nav-item" onclick="navAction(this)">
+      <i class="fa-solid fa-gem"></i>
+      <span>VIP</span>
+    </div>
+    <div class="nav-item" onclick="navAction(this)">
+      <i class="fa-solid fa-circle-user"></i>
+      <span>Profile</span>
+    </div>
+  </nav>
 
-  </div>
+</div><!-- end app-wrapper -->
 
-  <script>
-    // ✅ Real Backend URL
-    const BACKEND_URL = 'https://ponzibackend.onrender.com';
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-    const tg       = window.Telegram?.WebApp;
-    let   userData = null;
+<script>
+// ================================================
+//   Telegram Mini App - All-in-One Script
+//   Backend URL: https://ponzibackend.onrender.com
+// ================================================
 
-    function init() {
-      if (!tg) { showError(); return; }
+const BACKEND_URL = "https://ponzibackend.onrender.com";
 
-      tg.expand();
-      tg.ready();
-      applyTelegramTheme();
-      loadUserData();
+// ------------------------------------------------
+// 1. Telegram WebApp Init
+// ------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const tg = window.Telegram?.WebApp;
+
+  if (tg) {
+    tg.ready();
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user;
+
+    if (user) {
+      const displayName = user.username
+        ? "@" + user.username
+        : user.first_name || "Guest";
+
+      document.getElementById("username-display").textContent = displayName;
+
+      const uid = String(user.id);
+      document.getElementById("account-id").textContent = "****" + uid.slice(-4);
+
+      // Register user in backend
+      registerUser(user);
+    } else {
+      document.getElementById("username-display").textContent = "Guest";
+      document.getElementById("account-id").textContent = "****0000";
     }
+  } else {
+    // Dev mode fallback (browser)
+    document.getElementById("username-display").textContent = "DevMode";
+    document.getElementById("account-id").textContent = "****1234";
+  }
 
-    function applyTelegramTheme() {
-      document.getElementById('themeEl').textContent = tg.colorScheme || 'dark';
+  animateMenuItems();
+});
+
+// ------------------------------------------------
+// 2. Register user with Backend
+// ------------------------------------------------
+async function registerUser(user) {
+  try {
+    const res = await fetch(BACKEND_URL + "/api/user/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        telegram_id: user.id,
+        username:    user.username   || "",
+        first_name:  user.first_name || "",
+        last_name:   user.last_name  || "",
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      console.log("Registered:", data);
     }
+  } catch (err) {
+    // Render free tier may be sleeping — silent fail
+    console.warn("Backend:", err.message);
+  }
+}
 
-    function loadUserData() {
-      const initData = tg.initDataUnsafe;
+// ------------------------------------------------
+// 3. Menu Actions
+// ------------------------------------------------
+function menuAction(type) {
+  const tg = window.Telegram?.WebApp;
+  const msgs = {
+    withdraw: "ပိုက်ဆံထုတ်ရန် — မကြာမီ ရရှိနိုင်မည်",
+    wallet:   "လက်ကျန်ငွေ: $0.00",
+    invite:   "မိတ်ဆွေများကို ဖိတ်ပါ!",
+    topup:    "ပိုက်ဆံထည့်ရန် — မကြာမီ ရရှိနိုင်မည်",
+    rule:     "စည်းကမ်းများ — မကြာမီ ရရှိနိုင်မည်",
+    platform: "Platform — မကြာမီ ရရှိနိုင်မည်",
+  };
+  showToast(msgs[type] || "မကြာမီ ရရှိနိုင်မည်");
+  tg?.HapticFeedback?.impactOccurred("light");
+}
 
-      if (!initData || !initData.user) {
-        showError();
-        return;
-      }
+// ------------------------------------------------
+// 4. Bottom Nav
+// ------------------------------------------------
+function navAction(el) {
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  el.classList.add("active");
+  window.Telegram?.WebApp?.HapticFeedback?.selectionChanged();
+}
 
-      const user = initData.user;
-      userData   = user;
+// ------------------------------------------------
+// 5. Toast
+// ------------------------------------------------
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
 
-      displayUserData(user);
-      setTimeout(hideLoading, 800);
-      document.getElementById('authStatus').textContent = 'authenticated';
-    }
-
-    function displayUserData(user) {
-      const initials = (user.first_name || 'U').charAt(0).toUpperCase();
-      document.getElementById('avatarEl').textContent = initials;
-
-      const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ');
-      document.getElementById('nameEl').textContent     = fullName || 'Unknown User';
-      document.getElementById('usernameEl').textContent = user.username ? `@${user.username}` : 'username မရှိပါ';
-      document.getElementById('idEl').textContent       = user.id || '—';
-
-      const langMap = { my: '🇲🇲 မြန်မာ', en: '🇺🇸 English', zh: '🇨🇳 Chinese', ru: '🇷🇺 Russian' };
-      document.getElementById('langEl').textContent     = langMap[user.language_code] || user.language_code || '—';
-      document.getElementById('platformEl').textContent = tg.platform || '—';
-
-      if (user.is_premium) {
-        document.getElementById('premiumBadge').style.display = 'inline-flex';
-      }
-    }
-
-    // ✅ Backend Validation - ponzibackend.onrender.com သို့ ချိတ်ဆက်
-    async function validateWithBackend() {
-      const initData = tg.initData;
-
-      if (!initData) {
-        tg.showAlert('initData မရှိပါ - Telegram ထဲကနေ ဝင်ပါ');
-        return;
-      }
-
-      document.getElementById('apiStatus').textContent = 'connecting...';
-
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/validate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ initData })
-        });
-
-        const result = await response.json();
-
-        if (result.valid) {
-          document.getElementById('apiStatus').textContent = 'verified ✓';
-          tg.showPopup({
-            title: '✅ Verified',
-            message: `Backend မှာ Successfully verified ဖြစ်ပါပြီ!\n\nUser: ${result.user?.username || result.user?.first_name}`,
-            buttons: [{ type: 'ok', text: 'OK' }]
-          });
-        } else {
-          document.getElementById('apiStatus').textContent = 'failed ✗';
-          tg.showAlert('❌ Verification failed: ' + result.error);
-        }
-
-      } catch (err) {
-        document.getElementById('apiStatus').textContent = 'error';
-        tg.showAlert('🔴 Backend ချိတ်ဆက်မှု မရပါ:\n' + err.message);
-      }
-    }
-
-    function copyUserData() {
-      if (!userData) return;
-      navigator.clipboard.writeText(JSON.stringify(userData, null, 2))
-        .then(() => tg.showAlert('✅ User data copied!'))
-        .catch(() => tg.showAlert('Copy မရပါ'));
-    }
-
-    function showError() {
-      document.getElementById('loadingScreen').classList.add('hidden');
-      document.getElementById('appContainer').style.display = 'flex';
-      document.getElementById('errorCard').classList.add('show');
-      document.getElementById('profileCard').style.display = 'none';
-    }
-
-    function hideLoading() {
-      document.getElementById('loadingScreen').classList.add('hidden');
-      document.getElementById('appContainer').style.display = 'flex';
-    }
-
-    window.addEventListener('load', init);
-  </script>
-
+// ------------------------------------------------
+// 6. Animate menu items on load
+// ------------------------------------------------
+function animateMenuItems() {
+  document.querySelectorAll(".menu-item").forEach((el, i) => {
+    el.style.cssText = "opacity:0;transform:translateY(16px);transition:opacity .35s ease " + (i*0.07) + "s,transform .35s ease " + (i*0.07) + "s";
+    setTimeout(() => {
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    }, 80 + i * 70);
+  });
+}
+</script>
 </body>
 </html>
