@@ -1,17 +1,34 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "routes": [
-    { "src": "/images/(.*)", "dest": "/images/$1" },
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    {
+      "src": "/images/(.+\\.(?:png|jpg|jpeg|gif|webp|svg))",
+      "dest": "/images/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Frame-Options", "value": "ALLOWALL" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        { "key": "X-Frame-Options",              "value": "ALLOWALL" },
+        { "key": "Access-Control-Allow-Origin",  "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" }
+      ]
+    },
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, immutable" }
       ]
     }
   ]

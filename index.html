@@ -627,14 +627,26 @@ html, body {
 /* ========================================
    VIP CARDS (VIP Tab)
 ======================================== */
+/* VIP screen: 2-column grid for cards, then full-width note */
 .vip-screen { display: flex; flex-direction: column; gap: 16px; }
+
+/* Two-card row using CSS Grid for equal sizing */
+.vip-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
 
 .vip-card {
   border-radius: var(--radius-lg);
-  padding: 22px 20px;
+  padding: 18px 14px;
   box-shadow: var(--shadow-card);
   position: relative; overflow: hidden;
   animation: fadeUp 0.4s ease both;
+  /* Ensure cards are same height */
+  display: flex;
+  flex-direction: column;
 }
 
 .vip-card.lv1 {
@@ -654,65 +666,104 @@ html, body {
   background: rgba(255,255,255,0.1);
 }
 
+/* Badge: same size & padding in both cards */
 .vip-badge {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
   background: rgba(255,255,255,0.2);
   backdrop-filter: blur(8px);
   border-radius: 50px;
-  padding: 5px 14px;
-  font-size: 13px; font-weight: 700;
-  margin-bottom: 14px;
+  padding: 4px 10px;
+  font-size: 11.5px; font-weight: 700;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  text-align: center;
 }
 
+/* VIP name centered & same size */
 .vip-name {
-  font-size: 22px; font-weight: 800;
+  font-size: 20px; font-weight: 800;
   font-family: 'Poppins', sans-serif;
   margin-bottom: 6px;
+  text-align: center;
 }
 
-.vip-price {
-  font-size: 28px; font-weight: 800;
+/* Price block: centered, equal sizing */
+.vip-price-box {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.vip-price-label {
+  font-size: 10.5px;
+  opacity: 0.75;
+  font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
+  margin-bottom: 2px;
+}
+.vip-price-amount {
+  font-size: 18px; font-weight: 900;
   font-family: 'Poppins', sans-serif;
+  color: #ffd700;
+  line-height: 1.2;
+}
+.vip-price-currency {
+  font-size: 12px; font-weight: 600;
+  opacity: 0.85;
+  font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
 }
 
-.vip-price .vip-currency {
-  font-size: 15px; opacity: 0.8;
+/* Compare hint */
+.vip-compare-hint {
+  font-size: 10.5px;
+  text-align: center;
+  margin: 4px 0 6px;
+  min-height: 14px;
+  font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
+  line-height: 1.4;
 }
 
+/* Features list: flex-grow fills space so button stays at bottom */
 .vip-features {
-  margin: 14px 0;
-  display: flex; flex-direction: column; gap: 8px;
+  margin: 10px 0 12px;
+  display: flex; flex-direction: column; gap: 7px;
+  flex-grow: 1;
 }
 
 .vip-feature {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px;
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 11.5px;
   font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.4;
 }
 
-.vip-feature i { font-size: 14px; }
+.vip-feature i { font-size: 12px; flex-shrink: 0; margin-top: 1px; }
 
-/* VIP Buy Button */
+/* VIP Buy Button - always visible, never balance-gated */
 .vip-buy-btn {
   background: rgba(255,255,255,0.22);
   backdrop-filter: blur(8px);
   border: 1.5px solid rgba(255,255,255,0.5);
   color: white;
-  padding: 12px 24px;
+  padding: 11px 10px;
   border-radius: 50px;
-  font-size: 15px; font-weight: 700;
+  font-size: 12.5px; font-weight: 700;
   font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
   cursor: pointer;
   width: 100%;
   transition: all 0.2s ease;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  text-align: center;
+  margin-top: auto;
 }
 .vip-buy-btn:active { transform: scale(0.96); }
 .vip-buy-btn.owned {
   background: rgba(16,185,129,0.35);
   border-color: rgba(16,185,129,0.7);
+  cursor: default;
 }
-.vip-buy-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+/* NOTE: .vip-buy-btn:disabled removed intentionally — button always shows */
+.vip-buy-btn.loading { opacity: 0.75; cursor: wait; }
 
 /* VIP cost breakdown hint */
 .vip-balance-hint {
@@ -1354,59 +1405,64 @@ html, body {
       </div>
     </div>
 
-    <!-- VIP-1 Card -->
-    <div class="vip-card lv1">
-      <div class="vip-badge"><i class="fa-solid fa-star"></i> VIP Level 1</div>
-      <div class="vip-name">VIP - 1</div>
-      <div style="margin:8px 0 4px;padding:10px 16px;background:rgba(255,255,255,0.08);border-radius:10px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:#e2c7ff;font-family:'Noto Sans Myanmar','Poppins',sans-serif;">ဈေးနှုန်း</span>
-        <span style="font-size:20px;font-weight:900;color:#ffd700;font-family:'Poppins',sans-serif;">5,000 <span style="font-size:13px;font-weight:600;color:#e2c7ff;">ကျပ်</span></span>
-      </div>
-      <div id="vip1-compare" style="font-size:11.5px;color:#b89adf;text-align:center;margin:4px 0 8px;font-family:'Noto Sans Myanmar','Poppins',sans-serif;min-height:16px;"></div>
-      <div class="vip-features">
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> နေ့စဉ် Order ၁၀ ကြိမ် Grab ခွင့်</div>
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> LV-1 ပစ္စည်းများ (p1–p5)</div>
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Commission 10% ရရှိမည်</div>
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Referral Bonus ရရှိမည်</div>
-      </div>
-      <button class="vip-buy-btn" id="vip1-btn" onclick="buyVIP(1)">
-        💳 VIP-1 ဝယ်မည် (5,000 ကျပ်)
-      </button>
-      <div class="insufficient-card" id="vip1-insufficient">
-        <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
-        <div class="insufficient-desc" id="vip1-insufficient-desc">ကျေးဇူးပြု၍ ငွေဖြည့်ပါ</div>
-        <button class="topup-now-btn" onclick="closeVIPInsufficient(1); openTopup();">
-          <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
-        </button>
-      </div>
-    </div>
+    <!-- VIP Cards Grid: 2 columns equal size -->
+    <div class="vip-cards-grid">
 
-    <!-- VIP-2 Card -->
-    <div class="vip-card lv2">
-      <div class="vip-badge"><i class="fa-solid fa-crown"></i> VIP Level 2</div>
-      <div class="vip-name">VIP - 2</div>
-      <div style="margin:8px 0 4px;padding:10px 16px;background:rgba(255,255,255,0.08);border-radius:10px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:#ffd6a5;font-family:'Noto Sans Myanmar','Poppins',sans-serif;">ဈေးနှုန်း</span>
-        <span style="font-size:20px;font-weight:900;color:#ffd700;font-family:'Poppins',sans-serif;">20,000 <span style="font-size:13px;font-weight:600;color:#ffd6a5;">ကျပ်</span></span>
-      </div>
-      <div id="vip2-compare" style="font-size:11.5px;color:#ffd6a5;text-align:center;margin:4px 0 8px;font-family:'Noto Sans Myanmar','Poppins',sans-serif;min-height:16px;"></div>
-      <div class="vip-features">
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> နေ့စဉ် Order ၂၀ ကြိမ် Grab ခွင့်</div>
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> LV-1 & LV-2 ပစ္စည်းများ (p1–p15)</div>
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Commission 10% ရရှိမည်</div>
-        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Priority Support</div>
-      </div>
-      <button class="vip-buy-btn" id="vip2-btn" onclick="buyVIP(2)">
-        💳 VIP-2 ဝယ်မည် (20,000 ကျပ်)
-      </button>
-      <div class="insufficient-card" id="vip2-insufficient">
-        <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
-        <div class="insufficient-desc" id="vip2-insufficient-desc">ကျေးဇူးပြု၍ ငွေဖြည့်ပါ</div>
-        <button class="topup-now-btn" onclick="closeVIPInsufficient(2); openTopup();">
-          <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
+      <!-- VIP-1 Card -->
+      <div class="vip-card lv1">
+        <div class="vip-badge"><i class="fa-solid fa-star"></i> VIP 1</div>
+        <div class="vip-name">VIP - 1</div>
+        <div class="vip-price-box">
+          <div class="vip-price-label">ဈေးနှုန်း</div>
+          <div class="vip-price-amount">5,000 <span class="vip-price-currency">ကျပ်</span></div>
+        </div>
+        <div class="vip-compare-hint" id="vip1-compare" style="color:#b89adf;"></div>
+        <div class="vip-features">
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> နေ့စဉ် ၁၀ ကြိမ် Grab</div>
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> p1–p5 ပစ္စည်း</div>
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> 10% Commission</div>
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Referral Bonus</div>
+        </div>
+        <button class="vip-buy-btn" id="vip1-btn" onclick="buyVIP(1)">
+          💳 ဝယ်မည်
         </button>
+        <div class="insufficient-card" id="vip1-insufficient">
+          <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
+          <div class="insufficient-desc" id="vip1-insufficient-desc">ကျေးဇူးပြု၍ ငွေဖြည့်ပါ</div>
+          <button class="topup-now-btn" onclick="closeVIPInsufficient(1); openTopup();">
+            <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
+          </button>
+        </div>
       </div>
-    </div>
+
+      <!-- VIP-2 Card -->
+      <div class="vip-card lv2">
+        <div class="vip-badge"><i class="fa-solid fa-crown"></i> VIP 2</div>
+        <div class="vip-name">VIP - 2</div>
+        <div class="vip-price-box">
+          <div class="vip-price-label" style="color:#ffd6a5;">ဈေးနှုန်း</div>
+          <div class="vip-price-amount">20,000 <span class="vip-price-currency" style="color:#ffd6a5;">ကျပ်</span></div>
+        </div>
+        <div class="vip-compare-hint" id="vip2-compare" style="color:#ffd6a5;"></div>
+        <div class="vip-features">
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> နေ့စဉ် ၂၀ ကြိမ် Grab</div>
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> p1–p15 အားလုံး</div>
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> 10% Commission</div>
+          <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Priority Support</div>
+        </div>
+        <button class="vip-buy-btn" id="vip2-btn" onclick="buyVIP(2)">
+          💳 ဝယ်မည်
+        </button>
+        <div class="insufficient-card" id="vip2-insufficient">
+          <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
+          <div class="insufficient-desc" id="vip2-insufficient-desc">ကျေးဇူးပြု၍ ငွေဖြည့်ပါ</div>
+          <button class="topup-now-btn" onclick="closeVIPInsufficient(2); openTopup();">
+            <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
+          </button>
+        </div>
+      </div>
+
+    </div><!-- end vip-cards-grid -->
 
     <div class="history-card">
       <div class="history-title"><i class="fa-solid fa-circle-info"></i> မှတ်ချက်</div>
@@ -1801,30 +1857,44 @@ function updateUI() {
 }
 
 // ─── VIP Buttons ────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────
+//  updateVIPButtons
+//  FIX: Buttons are ALWAYS visible regardless of balance.
+//       Balance is checked only when the user clicks (inside buyVIP).
+//       Only "owned" VIP level gets the disabled/owned state.
+// ─────────────────────────────────────────────────────────────────────────
 function updateVIPButtons() {
   const btn1 = document.getElementById("vip1-btn");
   const btn2 = document.getElementById("vip2-btn");
 
+  if (!btn1 || !btn2) return;
+
+  // ── VIP-1 button ──
   if (state.vip_level >= 1) {
+    // Already owns VIP-1: show owned state
     btn1.innerHTML = "<i class='fa-solid fa-check'></i> VIP-1 ပိုင်ဆိုင်ပြီး";
     btn1.classList.add("owned");
-    btn1.disabled = true;
+    btn1.classList.remove("loading");
+    btn1.disabled = true;   // only disabled when already owned
     hideInsufficientCard(1);
   } else {
-    btn1.innerHTML = "💳 VIP-1 ဝယ်မည် (5,000 ကျပ်)";
-    btn1.classList.remove("owned");
-    btn1.disabled = false;
+    // Not yet owned: button always clickable, balance check happens on click
+    btn1.innerHTML = "💳 ဝယ်မည် (5,000 ကျပ်)";
+    btn1.classList.remove("owned", "loading");
+    btn1.disabled = false;  // ALWAYS enabled so user can click
   }
 
+  // ── VIP-2 button ──
   if (state.vip_level >= 2) {
     btn2.innerHTML = "<i class='fa-solid fa-check'></i> VIP-2 ပိုင်ဆိုင်ပြီး";
     btn2.classList.add("owned");
-    btn2.disabled = true;
+    btn2.classList.remove("loading");
+    btn2.disabled = true;   // only disabled when already owned
     hideInsufficientCard(2);
   } else {
-    btn2.innerHTML = "💳 VIP-2 ဝယ်မည် (20,000 ကျပ်)";
-    btn2.classList.remove("owned");
-    btn2.disabled = false;
+    btn2.innerHTML = "💳 ဝယ်မည် (20,000 ကျပ်)";
+    btn2.classList.remove("owned", "loading");
+    btn2.disabled = false;  // ALWAYS enabled so user can click
   }
 }
 
@@ -1864,7 +1934,7 @@ function renderProductGallery(vipLevel) {
   gridEl.innerHTML = imgNums.map(n => `
     <div class="product-card">
       <img
-        src="images/p${n}.png"
+        src="/images/p${n}.png"
         alt="Product ${n}"
         loading="lazy"
         onerror="this.src='https://via.placeholder.com/200x200/fce4ec/e91e63?text=P${n}'"
@@ -1930,7 +2000,7 @@ async function grabOrder() {
 
     // Use local image path matching p1.png pattern
     const imgNum = prod.id.replace("p", "");
-    document.getElementById("order-img").src              = `images/p${imgNum}.png`;
+    document.getElementById("order-img").src              = `/images/p${imgNum}.png`;
     document.getElementById("order-price").textContent    = prod.price.toLocaleString();
     document.getElementById("order-commission").textContent = data.commission.toLocaleString();
 
@@ -1991,10 +2061,13 @@ function updateHistory() {
 
 // ================================================
 //   VIP – INSTANT PURCHASE
-//   Calls /api/buy-vip → deducts balance → updates DOM
+//   FIX: Button is always shown. Balance is checked by Backend only.
+//   On click → call API → API checks balance → show result.
+//   Balance deduction & vip_level upgrade done in backend.
+//   Frontend updates balance display immediately on success.
 // ================================================
 async function buyVIP(level) {
-  // Already owns
+  // Already owns: just show toast, don't disable button before this check
   if (state.vip_level >= level) {
     return showToast(`✅ VIP-${level} ပိုင်ဆိုင်ပြီး ဖြစ်သည်`, "success");
   }
@@ -2003,11 +2076,12 @@ async function buyVIP(level) {
     return showToast("⚠️ Telegram မှ ဝင်ရောက်ပါ", "error");
   }
 
-  const cost    = level === 1 ? 5000 : 20000;
-  const btnId   = `vip${level}-btn`;
-  const btn     = document.getElementById(btnId);
-  const origTxt = btn.innerHTML;
+  const cost  = level === 1 ? 5000 : 20000;
+  const btn   = document.getElementById(`vip${level}-btn`);
 
+  // Show loading state (but button stays in DOM, not permanently disabled)
+  const origTxt = btn.innerHTML;
+  btn.classList.add("loading");
   btn.disabled  = true;
   btn.innerHTML = `<span class="spinner"></span> ဝယ်ယူနေသည်...`;
   hideInsufficientCard(level);
@@ -2021,27 +2095,28 @@ async function buyVIP(level) {
     const data = await res.json();
 
     if (data.success) {
-      // ── Instant DOM Update ──
-      state.balance   = data.new_balance;
-      state.vip_level = data.vip_level;
+      // ── (3) Balance Deduction: update frontend with new balance from backend ──
+      state.balance   = data.new_balance;  // backend already deducted the cost
+      state.vip_level = data.vip_level;    // vip_level upgraded by backend
       updateUI();
       updateCartSection();
       window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("success");
 
-      // ── Show success popup ──
+      // Show success popup
       const overlay = document.getElementById("vip-success-overlay");
       const title   = document.getElementById("vip-success-title");
       const costEl  = document.getElementById("vip-success-cost");
       if (title)  title.textContent  = `VIP Level ${level} ဝယ်ယူမှု အောင်မြင်ပါသည်`;
       if (costEl) costEl.textContent = `${data.cost ? data.cost.toLocaleString() : (level===1?'5,000':'20,000')} ကျပ်`;
       if (overlay) { overlay.style.display = "flex"; }
-      return;
+      return;  // updateUI() calls updateVIPButtons() which resets button state
     }
 
-    // ── Insufficient balance ──
+    // ── Insufficient balance: show beautiful card + toast ──
     if (data.insufficient) {
       showInsufficientCard(level, data.current_balance, cost);
-      showToast("❌ လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ ငွေဖြည့်ပါ", "error");
+      // Beautiful styled insufficient balance toast
+      showToast("❌ လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ ငွေအရင်ဖြည့်ပါ", "error");
     } else {
       showToast(data.error || "⚠️ မအောင်မြင်ပါ", "error");
     }
@@ -2050,6 +2125,8 @@ async function buyVIP(level) {
     showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
   }
 
+  // Restore button to clickable state (not owned, not loading)
+  btn.classList.remove("loading");
   btn.disabled  = false;
   btn.innerHTML = origTxt;
 }
