@@ -1,1171 +1,2184 @@
 <!DOCTYPE html>
 <html lang="my">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>Best Buy Mini App</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Best Buy Mini App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-/* =============================================
-   RESET & VARIABLES  —  Dark Blue/Purple Theme
-============================================= */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
-:root{
-  /* Dark bg */
-  --bg-main:    #0d0f1a;
-  --bg-card:    #161929;
-  --bg-card2:   #1e2236;
-  --bg-input:   #252840;
-
-  /* Accents */
-  --accent:     #7c5df9;
-  --accent2:    #5b8df8;
-  --grad:       linear-gradient(135deg,#7c5df9,#5b8df8);
-  --grad-gold:  linear-gradient(135deg,#f7971e,#ffd200);
-  --grad-vip2:  linear-gradient(135deg,#f953c6,#b91d73);
-
-  /* Text */
-  --t1: #eef0ff;
-  --t2: #8b90b8;
-  --t3: #555878;
-
-  /* Status */
-  --green:  #22c55e;
-  --red:    #ef4444;
-  --yellow: #fbbf24;
-
-  /* Geometry */
-  --nav-h:    64px;
-  --r-lg:     20px;
-  --r-md:     14px;
-  --r-sm:     10px;
-
-  /* Shadows */
-  --sh-card: 0 4px 24px rgba(0,0,0,0.4);
-  --sh-btn:  0 6px 20px rgba(124,93,249,0.45);
+/* ========================================
+   BASE RESET & VARIABLES
+======================================== */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,body{height:100%;overflow:hidden;font-family:'Poppins','Noto Sans Myanmar',sans-serif;background:var(--bg-main);color:var(--t1)}
+:root {
+  --pink-light:   #fce4ec;
+  --pink-mid:     #f8bbd0;
+  --pink-accent:  #e91e63;
+  --pink-deep:    #c2185b;
+  --pink-soft:    #ff6090;
+  --yellow-bb:    #FFE000;
+  --yellow-light: #fff8cc;
+  --blue-bb:      #003087;
+  --white:        #ffffff;
+  --text-dark:    #1a1a2e;
+  --text-mid:     #555577;
+  --text-soft:    #9999aa;
+  --green:        #10b981;
+  --red:          #ef4444;
+  --shadow-card:  0 8px 32px rgba(0,0,0,0.08);
+  --shadow-lg:    0 16px 48px rgba(233,30,99,0.15);
+  --radius-lg:    20px;
+  --radius-md:    14px;
+  --radius-sm:    10px;
+  --nav-height:   70px;
+}
 
-/* =============================================
-   LAYOUT
-============================================= */
-.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:var(--bg-main);overflow:hidden}
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Poppins', 'Noto Sans Myanmar', sans-serif;
+  background: var(--pink-light);
+}
 
-/* =============================================
-   HEADER
-============================================= */
-.header{
-  flex-shrink:0;
-  background:linear-gradient(160deg,#1a1040 0%,#0d1533 60%,#0a0f28 100%);
-  padding:16px 18px 14px;
-  position:relative;overflow:hidden;
+/* ========================================
+   APP WRAPPER
+======================================== */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--pink-light);
+  position: relative;
+  overflow: hidden;
 }
-.header::before{
-  content:'';position:absolute;top:-40px;right:-30px;
-  width:180px;height:180px;border-radius:50%;
-  background:radial-gradient(circle,rgba(124,93,249,.25) 0%,transparent 70%);
-}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.header-brand{display:flex;align-items:center;gap:10px}
-.brand-logo{
-  width:38px;height:38px;border-radius:10px;
-  background:var(--grad);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:800;color:#fff;letter-spacing:-1px;
-  box-shadow:var(--sh-btn);
-}
-.brand-name{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header-user{display:flex;align-items:center;gap:8px}
-.user-avatar{
-  width:34px;height:34px;border-radius:50%;
-  background:var(--grad);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;color:#fff;
-  border:2px solid rgba(124,93,249,.4);
-}
-.user-name{font-size:12px;color:var(--t2);font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* Balance strip */
-.balance-strip{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r-md);
-  padding:12px 16px;
-  display:flex;align-items:center;justify-content:space-between;
+/* ========================================
+   HERO BANNER
+======================================== */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #1a0533 0%, #2d0b5e 30%, #0a0a2e 60%, #1a0040 100%);
+  overflow: hidden;
+  flex-shrink: 0;
 }
-.bal-item{display:flex;flex-direction:column;align-items:center;gap:2px}
-.bal-label{font-size:10px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif}
-.bal-value{font-size:17px;font-weight:800;font-family:'Poppins',sans-serif}
-.bal-value.main{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.bal-div{width:1px;height:36px;background:rgba(255,255,255,.08)}
-.vip-pill{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:4px 10px;border-radius:50px;
-  font-size:11px;font-weight:700;
-}
-.vip-pill.none{background:rgba(255,255,255,.07);color:var(--t3)}
-.vip-pill.lv1{background:linear-gradient(135deg,rgba(124,93,249,.25),rgba(91,141,248,.25));color:#a8c5fa;border:1px solid rgba(124,93,249,.4)}
-.vip-pill.lv2{background:linear-gradient(135deg,rgba(249,83,198,.25),rgba(185,29,115,.25));color:#f9a8d4;border:1px solid rgba(249,83,198,.4)}
 
-/* =============================================
-   TABS
-============================================= */
-.tab-bar{
-  display:flex;background:var(--bg-card);
-  border-bottom:1px solid rgba(255,255,255,.05);
-  flex-shrink:0;
+.hero-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 22px, rgba(255,0,180,0.06) 22px, rgba(255,0,180,0.06) 23px),
+    repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(100,0,255,0.06) 28px, rgba(100,0,255,0.06) 29px);
 }
-.tab-btn{
-  flex:1;padding:11px 4px;
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  cursor:pointer;transition:all .2s;color:var(--t3);
-  border-bottom:2px solid transparent;font-size:9.5px;font-weight:600;
-  font-family:'Poppins',sans-serif;
-}
-.tab-btn i{font-size:17px;transition:all .2s}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-.tab-btn:active{transform:scale(.9)}
 
-/* =============================================
-   SCREEN CONTENT
-============================================= */
-.screens{flex:1;overflow:hidden;position:relative}
-.screen{
-  position:absolute;inset:0;
-  overflow-y:auto;padding:14px 14px calc(var(--nav-h)+10px);
-  display:none;flex-direction:column;gap:12px;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+.hero-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 60% 50%, rgba(120,0,220,0.35) 0%, transparent 70%);
 }
-.screen::-webkit-scrollbar{display:none}
-.screen.active{display:flex}
 
-/* =============================================
-   CARDS
-============================================= */
-.card{background:var(--bg-card);border-radius:var(--r-lg);padding:16px;box-shadow:var(--sh-card);border:1px solid rgba(255,255,255,.05)}
-.card-title{font-size:13px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:7px;margin-bottom:12px}
-.card-title i{color:var(--accent);font-size:14px}
+.hero-phone-wrap {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+}
 
-/* =============================================
-   MENU GRID
-============================================= */
-.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.menu-item{
-  background:var(--bg-card2);border-radius:var(--r-md);
-  padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;
-  cursor:pointer;transition:all .2s;border:1px solid rgba(255,255,255,.05);
+.hero-phone {
+  width: 175px; height: 132px;
+  background: linear-gradient(145deg, #efefef 0%, #ffffff 40%, #e5e5e5 100%);
+  border-radius: 18px 18px 0 0;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 -10px 45px rgba(0,0,0,0.55), 0 0 0 2px rgba(255,255,255,0.12);
+  position: relative; overflow: hidden;
 }
-.menu-item:active{transform:scale(.93);background:rgba(124,93,249,.15)}
-.menu-icon{
-  width:42px;height:42px;border-radius:12px;background:var(--grad);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:17px;box-shadow:var(--sh-btn);
-}
-.menu-label{font-size:10.5px;font-weight:600;color:var(--t2);text-align:center;font-family:'Noto Sans Myanmar',sans-serif;line-height:1.3}
 
-/* =============================================
-   HISTORY LIST
-============================================= */
-.history-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.history-row:last-child{border-bottom:none}
-.history-left{display:flex;align-items:center;gap:9px}
-.h-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.h-id{font-size:12.5px;font-weight:600;color:var(--t1)}
-.h-date{font-size:10px;color:var(--t3);margin-top:1px}
-.h-amt{font-size:13px;font-weight:700;color:var(--green)}
+.hero-phone::before {
+  content: '';
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 54px; height: 8px;
+  background: #2a2a2a;
+  border-radius: 0 0 8px 8px;
+}
 
-/* =============================================
-   VIP CARDS
-============================================= */
-.vip-card{
-  border-radius:var(--r-lg);padding:20px;
-  position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.07);
-  box-shadow:var(--sh-card);
+.bb-tag {
+  background: var(--yellow-bb);
+  width: 96px; height: 68px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.22);
 }
-.vip-card.lv1{background:linear-gradient(140deg,#1c1445 0%,#251e5c 50%,#1a1850 100%)}
-.vip-card.lv2{background:linear-gradient(140deg,#2a0d3a 0%,#3d0f4a 50%,#250930 100%)}
-.vip-card::before{
-  content:'';position:absolute;top:-20px;right:-20px;
-  width:110px;height:110px;border-radius:50%;
-  background:rgba(255,255,255,.05);
-}
-.vip-badge-label{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:4px 12px;border-radius:50px;
-  font-size:11px;font-weight:700;margin-bottom:10px;
-}
-.lv1 .vip-badge-label{background:rgba(124,93,249,.25);color:#c4b5fd;border:1px solid rgba(124,93,249,.4)}
-.lv2 .vip-badge-label{background:rgba(249,83,198,.25);color:#f9a8d4;border:1px solid rgba(249,83,198,.4)}
-.vip-name{font-size:24px;font-weight:800;font-family:'Poppins',sans-serif;margin-bottom:2px}
-.lv1 .vip-name{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.lv2 .vip-name{background:var(--grad-vip2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.vip-price{font-size:26px;font-weight:800;font-family:'Poppins',sans-serif;color:#fff;margin-bottom:14px}
-.vip-price span{font-size:14px;opacity:.65}
-.vip-features{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
-.vip-feat{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.8);font-family:'Noto Sans Myanmar',sans-serif}
-.vip-feat i{font-size:13px;color:var(--green)}
 
-.vip-buy-btn{
-  width:100%;padding:13px;border-radius:50px;
-  border:none;outline:none;cursor:pointer;
-  font-size:14px;font-weight:700;font-family:'Noto Sans Myanmar','Poppins',sans-serif;
-  transition:all .2s;
+.bb-tag::before {
+  content: '';
+  position: absolute; top: -7px; left: 12px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.18);
 }
-.lv1 .vip-buy-btn{background:var(--grad);color:#fff;box-shadow:var(--sh-btn)}
-.lv2 .vip-buy-btn{background:var(--grad-vip2);color:#fff;box-shadow:0 6px 20px rgba(249,83,198,.4)}
-.vip-buy-btn:active{transform:scale(.96)}
-.vip-buy-btn.owned{background:rgba(34,197,94,.2)!important;color:var(--green)!important;border:1px solid rgba(34,197,94,.4);box-shadow:none!important;cursor:default}
 
-/* =============================================
-   ORDER / GRAB SCREEN
-============================================= */
-.grab-counter{
-  background:var(--bg-card);border-radius:var(--r-md);padding:14px 16px;
-  display:flex;align-items:center;justify-content:space-between;
-  border:1px solid rgba(255,255,255,.05);
+.bb-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 19px; font-weight: 800;
+  color: var(--blue-bb);
+  text-align: center; line-height: 1.1;
+  letter-spacing: -0.5px;
 }
-.grab-counter-label{font-size:12px;color:var(--t2);font-family:'Noto Sans Myanmar',sans-serif}
-.grab-counter-val{font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-.grab-btn{
-  width:100%;padding:17px;border-radius:50px;border:none;outline:none;cursor:pointer;
-  background:var(--grad);color:#fff;
-  font-size:16px;font-weight:700;font-family:'Noto Sans Myanmar','Poppins',sans-serif;
-  box-shadow:var(--sh-btn);transition:all .2s;
-  display:flex;align-items:center;justify-content:center;gap:10px;
+.user-chip {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  padding: 6px 13px;
+  border-radius: 50px;
+  font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  z-index: 10;
 }
-.grab-btn:active{transform:scale(.96)}
-.grab-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 
-/* Locked state */
-.locked-box{
-  background:var(--bg-card);border-radius:var(--r-lg);padding:36px 20px;
-  text-align:center;border:1px dashed rgba(124,93,249,.3);
-}
-.locked-icon{font-size:48px;color:var(--t3);margin-bottom:14px}
-.locked-title{font-size:16px;font-weight:700;color:var(--t2);font-family:'Noto Sans Myanmar',sans-serif;margin-bottom:6px}
-.locked-sub{font-size:12px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif;line-height:1.6;margin-bottom:16px}
-.locked-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--grad);color:#fff;border:none;outline:none;cursor:pointer;
-  padding:12px 28px;border-radius:50px;font-size:13px;font-weight:700;
-  font-family:'Noto Sans Myanmar','Poppins',sans-serif;box-shadow:var(--sh-btn);
-  transition:all .2s;
-}
-.locked-btn:active{transform:scale(.95)}
+.user-chip i { font-size: 14px; color: var(--yellow-bb); }
 
-/* Order result */
-.order-result{
-  background:var(--bg-card);border-radius:var(--r-lg);padding:20px;
-  border:1px solid rgba(124,93,249,.25);
-  display:none;flex-direction:column;align-items:center;gap:12px;
-  animation:fadeUp .35s ease both;
+.vip-badge-hero {
+  position: absolute; top: 14px; left: 14px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a2e;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 11px; font-weight: 800;
+  display: none; align-items: center; gap: 4px;
+  z-index: 10;
 }
-.order-result.show{display:flex}
-.order-img{
-  width:130px;height:130px;object-fit:cover;
-  border-radius:var(--r-md);box-shadow:0 8px 24px rgba(0,0,0,.5);
-}
-.order-price-lbl{font-size:11px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif}
-.order-price-val{font-size:26px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.order-comm{font-size:13px;color:var(--green);font-weight:700;font-family:'Noto Sans Myanmar',sans-serif}
-.submit-btn{
-  width:100%;padding:14px;border-radius:50px;border:none;outline:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;
-  font-size:14px;font-weight:700;font-family:'Noto Sans Myanmar','Poppins',sans-serif;
-  box-shadow:0 6px 20px rgba(34,197,94,.35);transition:all .2s;
-}
-.submit-btn:active{transform:scale(.96)}
 
-/* Products grid (after VIP unlock) */
-.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.product-card{
-  background:var(--bg-card2);border-radius:var(--r-md);overflow:hidden;
-  border:1px solid rgba(255,255,255,.05);cursor:pointer;transition:all .2s;
+/* ========================================
+   SCROLLABLE CONTENT
+======================================== */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px calc(var(--nav-height) + 16px);
+  display: flex; flex-direction: column; gap: 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.product-card:active{transform:scale(.94)}
-.product-img{width:100%;aspect-ratio:1;object-fit:cover}
-.product-info{padding:6px 8px}
-.product-price{font-size:11px;font-weight:700;color:var(--accent2)}
-.product-comm{font-size:9px;color:var(--green);margin-top:1px}
+.scroll-content::-webkit-scrollbar { display: none; }
 
-/* =============================================
+/* ========================================
+   NOTIFICATION BAR
+======================================== */
+.notification-bar {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--pink-accent);
+  animation: fadeUp 0.4s ease both;
+}
+
+.notif-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-soft));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 15px; flex-shrink: 0;
+}
+
+.notif-text {
+  font-size: 12.5px; color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.4;
+}
+
+.notif-text strong { color: var(--pink-accent); }
+
+/* ========================================
+   MENU CARD
+======================================== */
+.menu-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 18px 14px;
+  box-shadow: var(--shadow-card);
+  animation: fadeUp 0.4s ease 0.08s both;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.menu-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  padding: 14px 8px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fafafa;
+  border: 1px solid #f0f0f5;
+}
+
+.menu-item:active { transform: scale(0.93); background: var(--pink-light); }
+
+.menu-icon-wrap {
+  width: 46px; height: 46px;
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-soft));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 18px;
+  box-shadow: 0 4px 12px rgba(233,30,99,0.3);
+}
+
+.menu-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--text-dark); text-align: center;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.3;
+}
+
+/* ========================================
+   BALANCE CARD
+======================================== */
+.balance-card {
+  background: linear-gradient(135deg, var(--pink-accent) 0%, #9c27b0 50%, #3f51b5 100%);
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  color: white;
+  box-shadow: var(--shadow-lg);
+  animation: fadeUp 0.45s ease 0.15s both;
+  position: relative; overflow: hidden;
+}
+
+.balance-card::before {
+  content: ''; position: absolute; top: -30px; right: -20px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+.balance-card::after {
+  content: ''; position: absolute; bottom: -25px; left: 15px;
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+
+.balance-label {
+  font-size: 12px; opacity: 0.85;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  font-weight: 500; letter-spacing: 0.5px;
+}
+
+.balance-amount {
+  font-size: 34px; font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  margin: 4px 0 6px; letter-spacing: -1px;
+  position: relative; z-index: 1;
+}
+
+.balance-amount .currency {
+  font-size: 18px; font-weight: 600; opacity: 0.8;
+}
+
+.balance-sub {
+  font-size: 12px; opacity: 0.75;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  position: relative; z-index: 1;
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+
+.balance-sub span { font-weight: 700; color: var(--yellow-bb); }
+
+/* ========================================
+   HISTORY CARD
+======================================== */
+.history-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px;
+  box-shadow: var(--shadow-card);
+  animation: fadeUp 0.55s ease 0.22s both;
+}
+
+.history-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-dark); margin-bottom: 12px;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.history-title i { color: var(--pink-accent); }
+
+.history-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f8;
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-left { display: flex; align-items: center; gap: 10px; }
+
+.history-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--pink-accent); flex-shrink: 0;
+}
+
+.history-info { display: flex; flex-direction: column; }
+.history-id   { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+.history-date { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
+.history-amount { font-size: 14px; font-weight: 700; color: var(--green); }
+
+/* ========================================
+   BOTTOM NAVIGATION
+======================================== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  height: var(--nav-height);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: space-around;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.10);
+  border-top: 1px solid rgba(233,30,99,0.08);
+  z-index: 100;
+}
+
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  padding: 10px 0; cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-soft); position: relative;
+}
+
+.nav-item i     { font-size: 20px; transition: all 0.2s ease; }
+.nav-item span  { font-size: 10px; font-weight: 600; font-family: 'Poppins', sans-serif; }
+
+.nav-item.active { color: var(--pink-accent); }
+.nav-item.active i { transform: translateY(-2px); }
+.nav-item.active::after {
+  content: ''; position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 32px; height: 3px;
+  background: var(--pink-accent);
+  border-radius: 0 0 4px 4px;
+}
+.nav-item:active { transform: scale(0.88); }
+
+/* ========================================
+   TAB SCREENS
+======================================== */
+.tab-screen {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px calc(var(--nav-height) + 16px);
+  flex-direction: column; gap: 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-screen::-webkit-scrollbar { display: none; }
+.tab-screen.active { display: flex; }
+
+/* ========================================
+   SECTION HEADER
+======================================== */
+.section-header {
+  font-size: 16px; font-weight: 700;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 2px;
+}
+.section-header i { color: var(--pink-accent); }
+
+/* ========================================
+   ORDER GRAB
+======================================== */
+.grab-btn-wrap { text-align: center; }
+
+.grab-btn {
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-soft));
+  color: white;
+  border: none; outline: none;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 16px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(233,30,99,0.4);
+  transition: all 0.2s ease;
+  display: inline-flex; align-items: center; gap: 10px;
+  width: 100%; justify-content: center;
+}
+.grab-btn:active   { transform: scale(0.95); }
+.grab-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.order-result-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  display: none;
+  animation: fadeUp 0.4s ease both;
+  text-align: center;
+}
+
+.order-result-card.show { display: block; }
+
+.order-img {
+  width: 120px; height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin: 0 auto 12px;
+  display: block;
+  box-shadow: var(--shadow-card);
+}
+
+.order-price {
+  font-size: 22px; font-weight: 800;
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
+}
+
+.order-commission {
+  font-size: 14px; color: var(--green);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  margin: 6px 0 14px;
+  font-weight: 600;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white;
+  border: none; outline: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 14px rgba(16,185,129,0.35);
+  transition: all 0.2s ease;
+}
+.submit-btn:active { transform: scale(0.96); }
+
+.daily-counter {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.daily-counter-label {
+  font-size: 13px; color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.daily-counter-value {
+  font-size: 18px; font-weight: 800;
+  color: var(--pink-accent);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ========================================
+   VIP LOCK NOTICE (non-VIP users)
+======================================== */
+.vip-lock-notice {
+  background: linear-gradient(135deg, #1a0533, #2d0b5e);
+  border-radius: var(--radius-lg);
+  padding: 32px 20px;
+  text-align: center;
+  color: white;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: fadeUp 0.4s ease both;
+}
+
+.vip-lock-notice.show { display: flex; }
+
+.lock-icon {
+  width: 72px; height: 72px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  color: var(--yellow-bb);
+}
+
+.lock-title {
+  font-size: 18px; font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+}
+
+.lock-desc {
+  font-size: 13px; opacity: 0.8;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.6;
+}
+
+.lock-btn {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a2e;
+  border: none; outline: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 15px; font-weight: 800;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(255,165,0,0.4);
+  transition: all 0.2s ease;
+}
+.lock-btn:active { transform: scale(0.96); }
+
+/* ========================================
+   VIP PRODUCT GALLERY
+======================================== */
+.vip-products-section {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.vip-products-section.show { display: flex; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.product-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  animation: fadeUp 0.4s ease both;
+  transition: transform 0.2s ease;
+}
+
+.product-card:active { transform: scale(0.97); }
+
+.product-card img {
+  width: 100%; aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+}
+
+.product-card-info {
+  padding: 10px 10px 12px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+
+.product-card-id {
+  font-size: 11px; font-weight: 700;
+  color: var(--pink-accent);
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+}
+
+.product-card-label {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+}
+
+.vip-gallery-header {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+  display: flex; align-items: center; gap: 12px;
+}
+
+.vip-gallery-badge {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a2e;
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 12px; font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+}
+
+.vip-gallery-text {
+  font-size: 12.5px; color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.5;
+}
+
+/* ========================================
+   VIP CARDS (VIP Tab)
+======================================== */
+.vip-screen { display: flex; flex-direction: column; gap: 16px; }
+
+.vip-card {
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  box-shadow: var(--shadow-card);
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.4s ease both;
+}
+
+.vip-card.lv1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.vip-card.lv2 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  animation-delay: 0.1s;
+}
+
+.vip-card::before {
+  content: ''; position: absolute; top: -30px; right: -20px;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+
+.vip-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 50px;
+  padding: 5px 14px;
+  font-size: 13px; font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.vip-name {
+  font-size: 22px; font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 6px;
+}
+
+.vip-price {
+  font-size: 28px; font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+}
+
+.vip-price .vip-currency {
+  font-size: 15px; opacity: 0.8;
+}
+
+.vip-features {
+  margin: 14px 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.vip-feature {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+}
+
+.vip-feature i { font-size: 14px; }
+
+/* VIP Buy Button */
+.vip-buy-btn {
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.vip-buy-btn:active { transform: scale(0.96); }
+.vip-buy-btn.owned {
+  background: rgba(16,185,129,0.35);
+  border-color: rgba(16,185,129,0.7);
+}
+.vip-buy-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* VIP cost breakdown hint */
+.vip-balance-hint {
+  font-size: 11px; opacity: 0.75;
+  margin-top: 8px;
+  text-align: center;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+}
+
+/* ========================================
+   PAYMENT MODAL (Topup)
+======================================== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+  opacity: 1; pointer-events: all;
+}
+
+.modal-sheet {
+  background: var(--white);
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 36px;
+  width: 100%; max-width: 480px;
+  max-height: 92vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.show .modal-sheet {
+  transform: translateY(0);
+}
+
+.modal-drag {
+  width: 40px; height: 4px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  margin: 0 auto 20px;
+}
+
+.modal-title {
+  font-size: 18px; font-weight: 800;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  text-align: center; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+.modal-title i { color: var(--pink-accent); }
+
+.payment-method-card {
+  background: #fafafa;
+  border: 1.5px solid #f0f0f5;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+
+.payment-method-info { flex: 1; }
+
+.payment-method-name {
+  font-size: 15px; font-weight: 700;
+  color: var(--text-dark);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px;
+}
+
+.payment-method-number {
+  font-size: 16px; font-weight: 800;
+  color: var(--pink-accent); letter-spacing: 0.5px;
+}
+
+.payment-method-owner {
+  font-size: 11px; color: var(--text-soft);
+  margin-top: 2px;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+}
+
+.copy-btn {
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-soft));
+  color: white;
+  border: none; outline: none;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.copy-btn:active { transform: scale(0.93); }
+.copy-btn.copied { background: linear-gradient(135deg, var(--green), #059669); }
+
+.payment-amount-display {
+  background: linear-gradient(135deg, var(--pink-light), var(--yellow-light));
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  text-align: center;
+  margin-bottom: 16px;
+  border: 1px dashed var(--pink-mid);
+}
+
+.payment-amount-label {
+  font-size: 12px; color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+}
+
+.payment-amount-value {
+  font-size: 26px; font-weight: 800;
+  color: var(--pink-accent);
+  font-family: 'Poppins', sans-serif;
+}
+
+.payment-steps {
+  background: var(--yellow-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,224,0,0.5);
+}
+
+.payment-step {
+  font-size: 12.5px; color: var(--text-dark);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: flex-start; gap: 8px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.payment-step:last-child { margin-bottom: 0; }
+
+.payment-step-num {
+  background: var(--pink-accent);
+  color: white;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-deep));
+  color: white;
+  border: none; outline: none;
+  padding: 15px 24px;
+  border-radius: 50px;
+  font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(233,30,99,0.4);
+  transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.confirm-btn:active   { transform: scale(0.96); }
+.confirm-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.modal-close-btn {
+  background: #f5f5f8;
+  color: var(--text-mid);
+  border: none; outline: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 14px; font-weight: 600;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+.modal-close-btn:active { transform: scale(0.96); }
+
+/* ========================================
    PROFILE TAB
-============================================= */
-.profile-head{display:flex;flex-direction:column;align-items:center;padding:10px 0 4px}
-.profile-avatar{
-  width:72px;height:72px;border-radius:50%;background:var(--grad);
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;color:#fff;margin-bottom:10px;
-  box-shadow:0 8px 24px rgba(124,93,249,.4);
+======================================== */
+.profile-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-accent), #9c27b0);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 32px;
+  margin: 0 auto 12px;
+  box-shadow: 0 8px 24px rgba(233,30,99,0.35);
 }
-.profile-name{font-size:17px;font-weight:800;color:var(--t1);margin-bottom:2px}
-.profile-uid{font-size:11px;color:var(--t3)}
 
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-card{background:var(--bg-card2);border-radius:var(--r-md);padding:14px;text-align:center;border:1px solid rgba(255,255,255,.05)}
-.stat-val{font-size:20px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-lbl{font-size:10px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif;margin-top:3px}
+.profile-name {
+  text-align: center;
+  font-size: 18px; font-weight: 800;
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 4px;
+}
 
-.referral-box{
-  background:var(--bg-card2);border-radius:var(--r-sm);padding:12px 14px;
-  display:flex;align-items:center;gap:10px;
-  border:1px dashed rgba(124,93,249,.35);
+.profile-id {
+  text-align: center;
+  font-size: 12px; color: var(--text-soft);
+  margin-bottom: 16px;
 }
-.referral-link-txt{font-size:11px;color:var(--t2);flex:1;word-break:break-all;font-family:'Poppins',sans-serif}
 
-/* =============================================
-   BUTTONS
-============================================= */
-.btn{
-  width:100%;padding:14px;border-radius:50px;border:none;outline:none;cursor:pointer;
-  font-size:14px;font-weight:700;font-family:'Noto Sans Myanmar','Poppins',sans-serif;
-  display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;
+.profile-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 14px;
 }
-.btn-primary{background:var(--grad);color:#fff;box-shadow:var(--sh-btn)}
-.btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
-.btn-sm{padding:9px 18px;font-size:12px;border-radius:50px;border:none;outline:none;cursor:pointer;font-weight:700;font-family:'Poppins',sans-serif;transition:all .2s}
-.btn-sm-primary{background:var(--grad);color:#fff;box-shadow:var(--sh-btn)}
-.btn-sm-copy{background:rgba(124,93,249,.18);color:var(--accent);border:1px solid rgba(124,93,249,.3)}
-.btn-sm-copy.copied{background:rgba(34,197,94,.18);color:var(--green);border-color:rgba(34,197,94,.3)}
-.btn:active,.btn-sm:active{transform:scale(.95)}
 
-/* =============================================
-   BOTTOM NAV
-============================================= */
-.bottom-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;height:var(--nav-h);
-  background:var(--bg-card);border-top:1px solid rgba(255,255,255,.06);
-  display:flex;align-items:center;z-index:100;
+.profile-stat-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
 }
-.nav-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:8px 0;cursor:pointer;transition:all .2s;color:var(--t3);
-  font-size:9.5px;font-weight:600;font-family:'Poppins',sans-serif;
-  position:relative;
-}
-.nav-item i{font-size:19px;transition:all .2s}
-.nav-item.active{color:var(--accent)}
-.nav-item.active i{transform:translateY(-2px)}
-.nav-item.active::before{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:28px;height:3px;background:var(--grad);border-radius:0 0 4px 4px;
-}
-.nav-item:active{transform:scale(.88)}
 
-/* =============================================
-   MODAL
-============================================= */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);
-  z-index:200;display:flex;align-items:flex-end;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .3s ease;
+.profile-stat-value {
+  font-size: 20px; font-weight: 800;
+  color: var(--pink-accent);
+  font-family: 'Poppins', sans-serif;
 }
-.modal-overlay.show{opacity:1;pointer-events:all}
-.modal-sheet{
-  background:var(--bg-card);border-radius:24px 24px 0 0;
-  padding:22px 18px 36px;width:100%;max-width:480px;max-height:90vh;
-  overflow-y:auto;
-  transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
-  border-top:1px solid rgba(255,255,255,.07);
+
+.profile-stat-label {
+  font-size: 11px; color: var(--text-soft);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  margin-top: 4px;
 }
-.modal-overlay.show .modal-sheet{transform:translateY(0)}
-.modal-drag{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:4px;margin:0 auto 18px}
-.modal-title{font-size:17px;font-weight:800;color:var(--t1);text-align:center;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Noto Sans Myanmar','Poppins',sans-serif}
-.modal-title i{color:var(--accent)}
 
-/* Payment method card */
-.pay-card{
-  background:var(--bg-card2);border-radius:var(--r-md);padding:14px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  margin-bottom:10px;border:1px solid rgba(255,255,255,.06);
+.referral-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-card);
 }
-.pay-name{font-size:13px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:7px;margin-bottom:3px}
-.pay-number{font-size:15px;font-weight:800;color:var(--accent2);letter-spacing:.4px}
-.pay-owner{font-size:10px;color:var(--t3);margin-top:2px;font-family:'Noto Sans Myanmar',sans-serif}
 
-/* Steps */
-.steps-box{background:rgba(124,93,249,.07);border-radius:var(--r-md);padding:13px 14px;margin-bottom:14px;border:1px solid rgba(124,93,249,.15)}
-.step-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;color:var(--t2);font-family:'Noto Sans Myanmar',sans-serif;line-height:1.5}
-.step-row:last-child{margin-bottom:0}
-.step-num{background:var(--accent);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-
-/* Amount highlight */
-.amt-box{background:rgba(124,93,249,.1);border-radius:var(--r-md);padding:13px 16px;text-align:center;margin-bottom:14px;border:1px dashed rgba(124,93,249,.3)}
-.amt-lbl{font-size:11px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif;margin-bottom:3px}
-.amt-val{font-size:24px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-
-/* Input */
-.input-group{margin-bottom:12px}
-.input-lbl{font-size:11px;font-weight:600;color:var(--t2);display:block;margin-bottom:5px;font-family:'Noto Sans Myanmar',sans-serif}
-.input-field,.input-select{
-  width:100%;background:var(--bg-input);border:1.5px solid rgba(255,255,255,.08);
-  border-radius:var(--r-sm);padding:12px 14px;font-size:14px;font-weight:600;
-  color:var(--t1);font-family:'Poppins',sans-serif;outline:none;
-  transition:border-color .2s;
+.referral-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-dark);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
 }
-.input-field:focus,.input-select:focus{border-color:var(--accent)}
-.input-select{appearance:none}
-.modal-close{
-  width:100%;padding:12px;border-radius:50px;border:none;outline:none;cursor:pointer;
-  background:rgba(255,255,255,.06);color:var(--t2);font-size:13px;font-weight:600;
-  font-family:'Noto Sans Myanmar','Poppins',sans-serif;margin-top:8px;transition:all .2s;
-}
-.modal-close:active{transform:scale(.96)}
+.referral-title i { color: var(--pink-accent); }
 
-/* =============================================
+.referral-link-box {
+  background: var(--pink-light);
+  border: 1.5px dashed var(--pink-mid);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+
+.referral-link-text {
+  font-size: 11.5px; color: var(--text-mid);
+  font-family: 'Poppins', sans-serif;
+  flex: 1; word-break: break-all;
+}
+
+.profile-action-btn {
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-soft));
+  color: white;
+  border: none; outline: none;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-size: 14px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 14px rgba(233,30,99,0.35);
+  transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 6px;
+}
+.profile-action-btn:active { transform: scale(0.96); }
+.profile-action-btn.outline {
+  background: transparent;
+  border: 1.5px solid var(--pink-accent);
+  color: var(--pink-accent);
+  box-shadow: none;
+}
+
+/* ========================================
+   WITHDRAW / INPUT
+======================================== */
+.input-group { margin-bottom: 14px; }
+
+.input-label {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  margin-bottom: 6px; display: block;
+}
+
+.input-field {
+  width: 100%;
+  background: #fafafa;
+  border: 1.5px solid #e8e8f0;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.input-field:focus { border-color: var(--pink-accent); }
+
+.input-select {
+  width: 100%;
+  background: #fafafa;
+  border: 1.5px solid #e8e8f0;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  appearance: none;
+}
+
+/* ========================================
    TOAST
-============================================= */
-.toast{
-  position:fixed;bottom:calc(var(--nav-h)+14px);left:50%;transform:translateX(-50%) translateY(12px);
-  background:rgba(22,25,41,.97);color:var(--t1);
-  padding:11px 20px;border-radius:50px;font-size:12.5px;
-  font-family:'Noto Sans Myanmar','Poppins',sans-serif;
-  z-index:999;opacity:0;pointer-events:none;
-  transition:all .3s ease;white-space:nowrap;max-width:90vw;
-  border:1px solid rgba(255,255,255,.08);
+======================================== */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-height) + 16px);
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(26,26,46,0.93);
+  color: white; padding: 11px 22px;
+  border-radius: 50px; font-size: 13px;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  z-index: 999; opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap; pointer-events: none;
+  max-width: 88vw;
+  text-align: center;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.success{border-color:rgba(34,197,94,.4);background:rgba(16,42,24,.97)}
-.toast.error{border-color:rgba(239,68,68,.4);background:rgba(42,16,16,.97)}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { background: rgba(16,185,129,0.95); }
+.toast.error   { background: rgba(239,68,68,0.95); }
+.toast.warning { background: rgba(245,158,11,0.95); }
 
-/* =============================================
+/* ========================================
+   INSUFFICIENT BALANCE ALERT
+======================================== */
+.insufficient-card {
+  background: linear-gradient(135deg, #fff0f3, #ffe8ec);
+  border: 1.5px solid rgba(233,30,99,0.25);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 10px;
+  display: none;
+  flex-direction: column; gap: 8px;
+  animation: fadeUp 0.3s ease both;
+}
+
+.insufficient-card.show { display: flex; }
+
+.insufficient-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--red);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.insufficient-desc {
+  font-size: 12.5px;
+  color: var(--text-mid);
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  line-height: 1.6;
+}
+
+.topup-now-btn {
+  background: linear-gradient(135deg, var(--pink-accent), var(--pink-deep));
+  color: white;
+  border: none; outline: none;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-size: 13px; font-weight: 700;
+  font-family: 'Noto Sans Myanmar', 'Poppins', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 4px 12px rgba(233,30,99,0.3);
+  transition: all 0.2s ease;
+}
+.topup-now-btn:active { transform: scale(0.96); }
+
+/* ========================================
    ANIMATIONS
-============================================= */
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+======================================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-.anim-fade{animation:fadeUp .35s ease both}
-.pulse-anim{animation:pulse 2s infinite}
-.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
 
-@supports (padding-bottom:env(safe-area-inset-bottom)){
-  .bottom-nav{padding-bottom:env(safe-area-inset-bottom);height:calc(var(--nav-h) + env(safe-area-inset-bottom))}
-  .screen{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px)}
+.pulse { animation: pulse 2s infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* iOS safe area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+  }
+  .tab-screen, .scroll-content {
+    padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 16px);
+  }
+}
+
+/* Spinner */
+.spinner {
+  width: 20px; height: 20px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
 }
 </style>
 </head>
+
 <body>
-<div class="app">
+<div class="app-wrapper">
 
-  <!-- ===== HEADER ===== -->
-  <div class="header">
-    <div class="header-top">
-      <div class="header-brand">
-        <div class="brand-logo">BB</div>
-        <span class="brand-name">Best Buy</span>
-      </div>
-      <div class="header-user">
-        <div class="user-avatar" id="u-avatar">U</div>
-        <span class="user-name" id="u-name">Loading...</span>
+  <!-- ===== HERO BANNER ===== -->
+  <div class="hero-banner">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-phone-wrap">
+      <div class="hero-phone">
+        <div class="bb-tag">
+          <span class="bb-text">BEST<br>BUY</span>
+        </div>
       </div>
     </div>
-    <div class="balance-strip">
-      <div class="bal-item">
-        <span class="bal-label">💰 လက်ကျန်ငွေ</span>
-        <span class="bal-value main" id="h-balance">0 ကျပ်</span>
-      </div>
-      <div class="bal-div"></div>
-      <div class="bal-item">
-        <span class="bal-label">📈 Commission</span>
-        <span class="bal-value" style="color:var(--green);font-size:15px" id="h-commission">0 ကျပ်</span>
-      </div>
-      <div class="bal-div"></div>
-      <div class="bal-item">
-        <span class="bal-label">💎 VIP</span>
-        <span class="vip-pill none" id="h-vip">မဝယ်ရသေး</span>
-      </div>
+    <div class="vip-badge-hero" id="vip-badge-hero">
+      <i class="fa-solid fa-gem"></i>
+      <span id="vip-badge-text">VIP-1</span>
+    </div>
+    <div class="user-chip">
+      <i class="fa-solid fa-circle-user"></i>
+      <span id="username-display">Loading...</span>
     </div>
   </div>
 
-  <!-- ===== TAB BAR ===== -->
-  <div class="tab-bar">
-    <div class="tab-btn active" onclick="switchTab('home',this)"><i class="fa-solid fa-house"></i>Home</div>
-    <div class="tab-btn" onclick="switchTab('order',this)"><i class="fa-solid fa-bolt"></i>Order</div>
-    <div class="tab-btn" onclick="switchTab('vip',this)"><i class="fa-solid fa-gem"></i>VIP</div>
-    <div class="tab-btn" onclick="switchTab('profile',this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
-  </div>
+  <!-- ===== HOME TAB ===== -->
+  <div class="tab-screen active" id="tab-home">
 
-  <!-- ===== SCREENS ===== -->
-  <div class="screens">
+    <div class="notification-bar">
+      <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
+      <p class="notif-text" id="notif-text">🎉 မင်္ဂလာပါ! Best Buy Mini App မှ ကြိုဆိုပါသည်</p>
+    </div>
 
-    <!-- HOME -->
-    <div class="screen active" id="screen-home">
+    <div class="menu-card">
+      <div class="menu-grid">
+        <div class="menu-item" onclick="openWithdraw()">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-money-bill-transfer"></i></div>
+          <span class="menu-label">ပိုက်ဆံထုတ်ရန်</span>
+        </div>
+        <div class="menu-item" onclick="navTo('profile')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-wallet"></i></div>
+          <span class="menu-label">လက်ကျန်ငွေ</span>
+        </div>
+        <div class="menu-item" onclick="copyReferral()">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-user-plus"></i></div>
+          <span class="menu-label">လူဖိတ်ရန်</span>
+        </div>
+        <div class="menu-item" onclick="openTopup()">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-circle-plus"></i></div>
+          <span class="menu-label">ပိုက်ဆံထည့်ရန်</span>
+        </div>
+        <div class="menu-item" onclick="showRules()">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="menu-label">စည်းကမ်း</span>
+        </div>
+        <div class="menu-item" onclick="navTo('vip')">
+          <div class="menu-icon-wrap"><i class="fa-solid fa-gem"></i></div>
+          <span class="menu-label">VIP</span>
+        </div>
+      </div>
+    </div>
 
-      <div class="card anim-fade">
-        <div class="menu-grid">
-          <div class="menu-item" onclick="openTopup()">
-            <div class="menu-icon"><i class="fa-solid fa-circle-plus"></i></div>
-            <span class="menu-label">ပိုက်ဆံထည့်ရန်</span>
+    <div class="balance-card">
+      <div class="balance-label">💰 စုစုပေါင်း လက်ကျန်ငွေ</div>
+      <div class="balance-amount">
+        <span id="balance-display">0</span>
+        <span class="currency"> ကျပ်</span>
+      </div>
+      <div class="balance-sub">
+        Account: <span id="account-id">----</span>
+        &nbsp;|&nbsp;
+        Commission: <span id="commission-display">0</span> ကျပ်
+      </div>
+    </div>
+
+    <div class="history-card">
+      <div class="history-title">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Commission မှတ်တမ်း
+      </div>
+      <div id="history-list">
+        <div class="history-item">
+          <div class="history-left">
+            <div class="history-dot"></div>
+            <div class="history-info">
+              <span class="history-id">Order Grab လုပ်ပြီး Commission ရနိုင်သည်</span>
+              <span class="history-date">Cart Tab → Grab Order ကိုနှိပ်ပါ</span>
+            </div>
           </div>
-          <div class="menu-item" onclick="openWithdraw()">
-            <div class="menu-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
-            <span class="menu-label">ပိုက်ဆံထုတ်ရန်</span>
-          </div>
-          <div class="menu-item" onclick="copyReferral()">
-            <div class="menu-icon"><i class="fa-solid fa-user-plus"></i></div>
-            <span class="menu-label">မိတ်ဆွေဖိတ်ရန်</span>
-          </div>
-          <div class="menu-item" onclick="switchTab('order',document.querySelectorAll('.tab-btn')[1])">
-            <div class="menu-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-            <span class="menu-label">Order Grab</span>
-          </div>
-          <div class="menu-item" onclick="switchTab('vip',document.querySelectorAll('.tab-btn')[2])">
-            <div class="menu-icon"><i class="fa-solid fa-gem"></i></div>
-            <span class="menu-label">VIP ဝယ်ရန်</span>
-          </div>
-          <div class="menu-item" onclick="switchTab('profile',document.querySelectorAll('.tab-btn')[3])">
-            <div class="menu-icon"><i class="fa-solid fa-wallet"></i></div>
-            <span class="menu-label">ကျွန်ုပ်အကောင့်</span>
-          </div>
+          <span class="history-amount">+0 ကျပ်</span>
         </div>
       </div>
+    </div>
 
-      <div class="card anim-fade" style="animation-delay:.08s">
-        <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i>Commission မှတ်တမ်း</div>
-        <div id="history-list">
-          <div style="text-align:center;padding:20px 0;color:var(--t3);font-size:13px;font-family:'Noto Sans Myanmar',sans-serif">
-            Order Grab လုပ်ပြီးမှ မှတ်တမ်း ပေါ်မည်
-          </div>
-        </div>
+  </div><!-- end tab-home -->
+
+  <!-- ===== CART TAB ===== -->
+  <div class="tab-screen" id="tab-cart">
+
+    <div class="section-header">
+      <i class="fa-solid fa-cart-shopping"></i>
+      Order Grab
+    </div>
+
+    <!-- VIP Lock Notice (shown when vip_level === 0) -->
+    <div class="vip-lock-notice" id="vip-lock-notice">
+      <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+      <div class="lock-title">VIP ဝယ်ယူပါ</div>
+      <div class="lock-desc">
+        လုပ်ငန်းစဉ်စတင်ရန် VIP ဝယ်ယူပါ<br>
+        VIP-1: ၅,၀၀၀ ကျပ် | VIP-2: ၅၀,၀၀၀ ကျပ်<br>
+        Order Grab လုပ်ကာ နေ့စဉ် Commission ရရှိမည်
       </div>
-
-    </div><!-- /home -->
-
-    <!-- ORDER -->
-    <div class="screen" id="screen-order">
-
-      <!-- Locked View (VIP = 0) -->
-      <div class="locked-box anim-fade" id="locked-view">
-        <div class="locked-icon"><i class="fa-solid fa-lock"></i></div>
-        <div class="locked-title">Order Grab လုပ်ရန် VIP လိုအပ်သည်</div>
-        <div class="locked-sub">
-          Order Grab စနစ်ကို အသုံးပြုရန်<br>
-          VIP Package တစ်ခု ဦးစွာ ဝယ်ယူပါ။<br>
-          Commission ၁၀% နေ့တိုင်း ရရှိနိုင်သည်။
-        </div>
-        <button class="locked-btn" onclick="switchTab('vip',document.querySelectorAll('.tab-btn')[2])">
-          <i class="fa-solid fa-gem"></i> VIP ဝယ်ရန် သွားမည်
-        </button>
-      </div>
-
-      <!-- Active View (VIP > 0) -->
-      <div id="active-order-view" style="display:none;flex-direction:column;gap:12px">
-
-        <!-- Counter -->
-        <div class="grab-counter anim-fade">
-          <div>
-            <div class="grab-counter-label">ယနေ့ Order Count</div>
-            <div style="font-size:11px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif;margin-top:2px" id="daily-lbl">VIP-1 · ၁၀ ကြိမ်/နေ့</div>
-          </div>
-          <div class="grab-counter-val"><span id="daily-count">0</span>/<span id="daily-max">10</span></div>
-        </div>
-
-        <!-- Grab button -->
-        <button class="grab-btn pulse-anim" id="grab-btn" onclick="grabOrder()">
-          <i class="fa-solid fa-bolt"></i> Order Grab လုပ်မည်
-        </button>
-
-        <!-- Result -->
-        <div class="order-result" id="order-result">
-          <img class="order-img" id="result-img" src="" alt="product"/>
-          <div class="order-price-lbl">ပစ္စည်းဈေးနှုန်း</div>
-          <div class="order-price-val" id="result-price">0 ကျပ်</div>
-          <div class="order-comm" id="result-comm">+ Commission: 0 ကျပ်</div>
-          <button class="submit-btn" onclick="submitOrder()">
-            <i class="fa-solid fa-check-circle"></i>&nbsp;Submit လုပ်မည်
-          </button>
-        </div>
-
-        <!-- Products grid -->
-        <div class="card">
-          <div class="card-title"><i class="fa-solid fa-boxes-stacked"></i>ရရှိနိုင်သော ပစ္စည်းများ</div>
-          <div class="products-grid" id="products-grid"></div>
-        </div>
-
-      </div>
-    </div><!-- /order -->
-
-    <!-- VIP -->
-    <div class="screen" id="screen-vip">
-
-      <div style="font-size:13px;color:var(--t2);font-family:'Noto Sans Myanmar',sans-serif;text-align:center;padding:4px 0 2px">
-        VIP Package ဝယ်ယူပြီး Order Grab စလုပ်ပါ
-      </div>
-
-      <!-- VIP-1 -->
-      <div class="vip-card lv1 anim-fade">
-        <div class="vip-badge-label"><i class="fa-solid fa-star"></i> VIP Level 1</div>
-        <div class="vip-name">VIP - 1</div>
-        <div class="vip-price"><span>အရင်း </span>5,000 ကျပ်</div>
-        <div class="vip-features">
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>နေ့စဉ် Order ၁၀ ကြိမ် Grab ခွင့်</div>
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>LV-1 ပစ္စည်း (p1–p5) ၂,၀၀၀–၄,၅၀၀ ကျပ်</div>
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>Commission ၁၀% ရရှိမည်</div>
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>Referral Bonus ရရှိမည်</div>
-        </div>
-        <button class="vip-buy-btn" id="vip1-btn" onclick="buyVIP(1)">
-          💳 VIP-1 ဝယ်မည် (5,000 ကျပ်)
-        </button>
-      </div>
-
-      <!-- VIP-2 -->
-      <div class="vip-card lv2 anim-fade" style="animation-delay:.1s">
-        <div class="vip-badge-label"><i class="fa-solid fa-crown"></i> VIP Level 2</div>
-        <div class="vip-name">VIP - 2</div>
-        <div class="vip-price"><span>အရင်း </span>50,000 ကျပ်</div>
-        <div class="vip-features">
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>နေ့စဉ် Order ၂၀ ကြိမ် Grab ခွင့်</div>
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>LV-1 & LV-2 ပစ္စည်း (p1–p15) ၂,၀၀၀–၄၅,၀၀၀ ကျပ်</div>
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>Commission ၁၀% ရရှိမည်</div>
-          <div class="vip-feat"><i class="fa-solid fa-check-circle"></i>Priority Support</div>
-        </div>
-        <button class="vip-buy-btn" id="vip2-btn" onclick="buyVIP(2)">
-          💳 VIP-2 ဝယ်မည် (50,000 ကျပ်)
-        </button>
-      </div>
-
-      <div class="card" style="font-size:12px;color:var(--t3);font-family:'Noto Sans Myanmar',sans-serif;line-height:1.7">
-        ⚠️ ငွေမလုံလောက်ပါက Home → ပိုက်ဆံထည့်ရန် မှ ဦးစွာ ဖြည့်ပါ<br>
-        ⚠️ Admin မှ ငွေဖြည့်ပေးပြီးမှ VIP ဝယ်နိုင်သည်
-      </div>
-
-    </div><!-- /vip -->
-
-    <!-- PROFILE -->
-    <div class="screen" id="screen-profile">
-
-      <div class="profile-head anim-fade">
-        <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
-        <div class="profile-name" id="p-name">Loading...</div>
-        <div class="profile-uid" id="p-uid">ID: ****0000</div>
-      </div>
-
-      <div class="stats-grid anim-fade" style="animation-delay:.07s">
-        <div class="stat-card"><div class="stat-val" id="s-balance">0</div><div class="stat-lbl">လက်ကျန်ငွေ (ကျပ်)</div></div>
-        <div class="stat-card"><div class="stat-val" id="s-commission">0</div><div class="stat-lbl">Commission (ကျပ်)</div></div>
-        <div class="stat-card"><div class="stat-val" id="s-vip" style="font-size:16px">-</div><div class="stat-lbl">VIP Level</div></div>
-        <div class="stat-card"><div class="stat-val" id="s-orders">0</div><div class="stat-lbl">ယနေ့ Orders</div></div>
-      </div>
-
-      <div class="card anim-fade" style="animation-delay:.13s">
-        <div class="card-title"><i class="fa-solid fa-link"></i>Referral Link</div>
-        <div style="font-size:11.5px;color:var(--t2);font-family:'Noto Sans Myanmar',sans-serif;margin-bottom:10px;line-height:1.6">
-          🎁 မိတ်ဆွေ ဖိတ်တိုင်း <strong style="color:var(--accent)">၁,၀၀၀ ကျပ်</strong> Bonus ရမည်
-        </div>
-        <div class="referral-box">
-          <span class="referral-link-txt" id="ref-link">https://t.me/wealthflowmyanmar_bot?start=ref_0000</span>
-          <button class="btn-sm btn-sm-copy" id="copy-ref-btn" onclick="copyReferral()">
-            <i class="fa-solid fa-copy"></i> Copy
-          </button>
-        </div>
-        <div style="margin-top:10px">
-          <button class="btn btn-primary" onclick="shareReferral()">
-            <i class="fa-solid fa-share-nodes"></i> Share မည်
-          </button>
-        </div>
-      </div>
-
-      <button class="btn btn-outline anim-fade" onclick="openTopup()" style="animation-delay:.18s">
-        <i class="fa-solid fa-circle-plus"></i> ပိုက်ဆံသွင်းမည်
+      <button class="lock-btn" onclick="navTo('vip')">
+        <i class="fa-solid fa-gem"></i> VIP ဝယ်ယူရန်
       </button>
-      <button class="btn btn-outline anim-fade" onclick="openWithdraw()" style="animation-delay:.22s">
-        <i class="fa-solid fa-money-bill-transfer"></i> ပိုက်ဆံထုတ်မည်
+    </div>
+
+    <!-- VIP Product Gallery (shown when vip_level > 0) -->
+    <div class="vip-products-section" id="vip-products-section">
+
+      <!-- Gallery Header -->
+      <div class="vip-gallery-header">
+        <div class="vip-gallery-badge" id="gallery-vip-badge">VIP-1</div>
+        <div class="vip-gallery-text" id="gallery-vip-text">
+          VIP-1 ပစ္စည်းများ Grab လုပ်နိုင်သည်
+        </div>
+      </div>
+
+      <!-- Daily Counter -->
+      <div class="daily-counter">
+        <div>
+          <div class="daily-counter-label">ယနေ့ Order Count</div>
+          <div style="font-size:11px;color:var(--text-soft);font-family:'Noto Sans Myanmar',sans-serif;margin-top:2px;" id="daily-limit-text">-</div>
+        </div>
+        <div class="daily-counter-value">
+          <span id="daily-count">0</span>/<span id="daily-max">-</span>
+        </div>
+      </div>
+
+      <!-- Grab Button -->
+      <div class="grab-btn-wrap">
+        <button class="grab-btn pulse" id="grab-btn" onclick="grabOrder()">
+          <i class="fa-solid fa-bolt"></i>
+          Order Grab လုပ်ရန်
+        </button>
+      </div>
+
+      <!-- Order Result -->
+      <div class="order-result-card" id="order-result">
+        <img class="order-img" id="order-img" src="" alt="product" />
+        <div class="order-price"><span id="order-price">0</span> ကျပ်</div>
+        <div class="order-commission">
+          🎉 Commission: +<span id="order-commission">0</span> ကျပ် (10%)
+        </div>
+        <button class="submit-btn" onclick="submitOrder()">
+          <i class="fa-solid fa-check"></i>&nbsp; အော်ဒါ Submit လုပ်မည်
+        </button>
+      </div>
+
+      <!-- Product Images Grid -->
+      <div class="section-header" style="margin-top:4px;">
+        <i class="fa-solid fa-images"></i>
+        <span id="gallery-title">VIP-1 ပစ္စည်းများ</span>
+      </div>
+      <div class="products-grid" id="products-grid">
+        <!-- Dynamically filled by JS -->
+      </div>
+
+      <!-- Info Card -->
+      <div class="history-card">
+        <div class="history-title"><i class="fa-solid fa-circle-info"></i> အကြောင်းအရာ</div>
+        <div style="font-size:13px;color:var(--text-mid);font-family:'Noto Sans Myanmar','Poppins',sans-serif;line-height:1.7;">
+          ✅ Grab Order နှိပ်လိုက်ပါ<br>
+          ✅ ပစ္စည်း ကျပန်းကျမည်<br>
+          ✅ Submit နှိပ်ရင် Commission ရမည်<br>
+          ✅ VIP-1: နေ့စဉ် ၁၀ ကြိမ်<br>
+          ✅ VIP-2: နေ့စဉ် ၂၀ ကြိမ်
+        </div>
+      </div>
+
+    </div><!-- end vip-products-section -->
+
+  </div><!-- end tab-cart -->
+
+  <!-- ===== VIP TAB ===== -->
+  <div class="tab-screen" id="tab-vip">
+
+    <div class="section-header">
+      <i class="fa-solid fa-gem"></i>
+      VIP အဆင့်
+    </div>
+
+    <!-- VIP-1 Card -->
+    <div class="vip-card lv1">
+      <div class="vip-badge"><i class="fa-solid fa-star"></i> VIP Level 1</div>
+      <div class="vip-name">VIP - 1</div>
+      <div class="vip-price"><span class="vip-currency">အရင်း </span>5,000 ကျပ်</div>
+      <div class="vip-features">
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> နေ့စဉ် Order ၁၀ ကြိမ် Grab ခွင့်</div>
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> LV-1 ပစ္စည်းများ (p1–p5)</div>
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Commission 10% ရရှိမည်</div>
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Referral Bonus ရရှိမည်</div>
+      </div>
+      <button class="vip-buy-btn" id="vip1-btn" onclick="buyVIP(1)">
+        💳 VIP-1 ဝယ်မည်
       </button>
+      <!-- Insufficient balance notice -->
+      <div class="insufficient-card" id="vip1-insufficient">
+        <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
+        <div class="insufficient-desc" id="vip1-insufficient-desc">
+          ကျေးဇူးပြု၍ ငွေဖြည့်ပါ
+        </div>
+        <button class="topup-now-btn" onclick="closeVIPInsufficient(1); openTopup();">
+          <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
+        </button>
+      </div>
+    </div>
 
-    </div><!-- /profile -->
+    <!-- VIP-2 Card -->
+    <div class="vip-card lv2">
+      <div class="vip-badge"><i class="fa-solid fa-crown"></i> VIP Level 2</div>
+      <div class="vip-name">VIP - 2</div>
+      <div class="vip-price"><span class="vip-currency">အရင်း </span>50,000 ကျပ်</div>
+      <div class="vip-features">
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> နေ့စဉ် Order ၂၀ ကြိမ် Grab ခွင့်</div>
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> LV-1 & LV-2 ပစ္စည်းများ (p1–p15)</div>
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Commission 10% ရရှိမည်</div>
+        <div class="vip-feature"><i class="fa-solid fa-check-circle"></i> Priority Support</div>
+      </div>
+      <button class="vip-buy-btn" id="vip2-btn" onclick="buyVIP(2)">
+        💳 VIP-2 ဝယ်မည်
+      </button>
+      <div class="insufficient-card" id="vip2-insufficient">
+        <div class="insufficient-title"><i class="fa-solid fa-triangle-exclamation"></i> လက်ကျန်ငွေ မလုံလောက်ပါ</div>
+        <div class="insufficient-desc" id="vip2-insufficient-desc">
+          ကျေးဇူးပြု၍ ငွေဖြည့်ပါ
+        </div>
+        <button class="topup-now-btn" onclick="closeVIPInsufficient(2); openTopup();">
+          <i class="fa-solid fa-circle-plus"></i> ငွေဖြည့်ရန်
+        </button>
+      </div>
+    </div>
 
-  </div><!-- /screens -->
+    <div class="history-card">
+      <div class="history-title"><i class="fa-solid fa-circle-info"></i> မှတ်ချက်</div>
+      <div style="font-size:12.5px;color:var(--text-mid);font-family:'Noto Sans Myanmar','Poppins',sans-serif;line-height:1.7;">
+        ⚡ VIP ဝယ်ယူပြီးသည်နှင့် ချက်ချင်း Balance မှ နှုတ်ပြီး Order Grab လုပ်နိုင်ပြီ<br>
+        💰 ငွေ မလုံလောက်ပါက ပိုက်ဆံသွင်းပြီး VIP ဝယ်ပါ<br>
+        📲 Admin မှ /setvip command ဖြင့်လည်း VIP သတ်မှတ်ပေးနိုင်သည်
+      </div>
+    </div>
 
-  <!-- ===== BOTTOM NAV ===== -->
+  </div><!-- end tab-vip -->
+
+  <!-- ===== PROFILE TAB ===== -->
+  <div class="tab-screen" id="tab-profile">
+
+    <div class="profile-avatar">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <div class="profile-name" id="profile-name">Loading...</div>
+    <div class="profile-id" id="profile-id">ID: ****0000</div>
+
+    <div class="profile-stats">
+      <div class="profile-stat-card">
+        <div class="profile-stat-value" id="stat-balance">0</div>
+        <div class="profile-stat-label">လက်ကျန်ငွေ (ကျပ်)</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value" id="stat-commission">0</div>
+        <div class="profile-stat-label">Commission (ကျပ်)</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value" id="stat-vip">-</div>
+        <div class="profile-stat-label">VIP Level</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value" id="stat-orders">0</div>
+        <div class="profile-stat-label">ယနေ့ Orders</div>
+      </div>
+    </div>
+
+    <div class="referral-card">
+      <div class="referral-title">
+        <i class="fa-solid fa-link"></i>
+        Referral Link - မိတ်ဆွေဖိတ်ကြားရန်
+      </div>
+      <div style="font-size:12px;color:var(--text-mid);font-family:'Noto Sans Myanmar',sans-serif;margin-bottom:10px;line-height:1.6;">
+        🎁 သင်ဖိတ်ကြားသော မိတ်ဆွေ App ဖွင့်တိုင်း <strong style="color:var(--pink-accent)">၁,၀၀၀ ကျပ်</strong> Bonus ရရှိမည်
+      </div>
+      <div class="referral-link-box">
+        <span class="referral-link-text" id="referral-link">https://t.me/yourbot?start=ref_0000</span>
+        <button class="copy-btn" onclick="copyReferral()" id="copy-ref-btn">
+          <i class="fa-solid fa-copy"></i> Copy
+        </button>
+      </div>
+      <button class="profile-action-btn" onclick="shareReferral()">
+        <i class="fa-solid fa-share-nodes"></i> မိတ်ဆွေများဆီ Share လုပ်မည်
+      </button>
+    </div>
+
+    <button class="profile-action-btn outline" onclick="openTopup()">
+      <i class="fa-solid fa-circle-plus"></i> ပိုက်ဆံသွင်းမည်
+    </button>
+
+    <button class="profile-action-btn outline" onclick="openWithdraw()">
+      <i class="fa-solid fa-money-bill-transfer"></i> ပိုက်ဆံထုတ်မည်
+    </button>
+
+  </div><!-- end tab-profile -->
+
+  <!-- ===== BOTTOM NAVIGATION ===== -->
   <nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('home',this)"><i class="fa-solid fa-house"></i>Home</div>
-    <div class="nav-item" onclick="switchTab('order',this)"><i class="fa-solid fa-bolt"></i>Order</div>
-    <div class="nav-item" onclick="switchTab('vip',this)"><i class="fa-solid fa-gem"></i>VIP</div>
-    <div class="nav-item" onclick="switchTab('profile',this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
+    <div class="nav-item active" onclick="navTo('home', this)">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="navTo('cart', this)">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span>Cart</span>
+    </div>
+    <div class="nav-item" onclick="navTo('vip', this)">
+      <i class="fa-solid fa-gem"></i>
+      <span>VIP</span>
+    </div>
+    <div class="nav-item" onclick="navTo('profile', this)">
+      <i class="fa-solid fa-circle-user"></i>
+      <span>Profile</span>
+    </div>
   </nav>
 
-</div><!-- /app -->
+</div><!-- end app-wrapper -->
 
-<!-- TOAST -->
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <!-- ===== TOPUP MODAL ===== -->
-<div class="modal-overlay" id="modal-topup">
+<div class="modal-overlay" id="topup-modal">
   <div class="modal-sheet">
     <div class="modal-drag"></div>
-    <div class="modal-title"><i class="fa-solid fa-circle-plus"></i>ပိုက်ဆံသွင်းရန်</div>
-    <div class="input-group">
-      <label class="input-lbl">ပမာဏ (ကျပ်)</label>
-      <input class="input-field" type="number" id="topup-amount" placeholder="ဥပမာ: 5000" min="1000"/>
-    </div>
-    <div style="font-size:12.5px;font-weight:700;color:var(--t1);margin-bottom:10px;font-family:'Noto Sans Myanmar',sans-serif">📱 အောက်ပါ နံပါတ်သို့ ငွေလွှဲပါ</div>
-    <div class="pay-card">
-      <div>
-        <div class="pay-name"><i class="fa-solid fa-mobile-screen" style="color:#00b4d8"></i>KPay</div>
-        <div class="pay-number">09783646736</div>
-        <div class="pay-owner">Name: Yee Mon Naing</div>
-      </div>
-      <button class="btn-sm btn-sm-copy" onclick="copyText('09783646736',this)"><i class="fa-solid fa-copy"></i> Copy</button>
-    </div>
-    <div class="pay-card">
-      <div>
-        <div class="pay-name"><i class="fa-solid fa-wave-square" style="color:#9b59b6"></i>Wave</div>
-        <div class="pay-number">09790611406</div>
-        <div class="pay-owner">Name: Aye Thandar</div>
-      </div>
-      <button class="btn-sm btn-sm-copy" onclick="copyText('09790611406',this)"><i class="fa-solid fa-copy"></i> Copy</button>
-    </div>
-    <div class="steps-box">
-      <div class="step-row"><div class="step-num">1</div>ပမာဏ ဖြည့်ပြီး ငွေလွှဲပါ</div>
-      <div class="step-row"><div class="step-num">2</div>"အတည်ပြုမည်" နှိပ်ပြီး Admin ထံ အသိပေးပါ</div>
-      <div class="step-row"><div class="step-num">3</div>Admin မှ ၁–၂ နာရီအတွင်း Balance ဖြည့်ပေးမည်</div>
-    </div>
-    <button class="btn btn-primary" onclick="confirmTopup()"><i class="fa-solid fa-check-circle"></i>ငွေလွှဲပြီး အတည်ပြုမည်</button>
-    <button class="modal-close" onclick="closeModal('modal-topup')">ပြန်သွားမည်</button>
-  </div>
-</div>
+    <div class="modal-title"><i class="fa-solid fa-circle-plus"></i> ပိုက်ဆံသွင်းရန်</div>
 
-<!-- ===== VIP BUY MODAL ===== -->
-<div class="modal-overlay" id="modal-vip">
-  <div class="modal-sheet">
-    <div class="modal-drag"></div>
-    <div class="modal-title"><i class="fa-solid fa-gem"></i>VIP <span id="vip-modal-lv">1</span> ဝယ်ယူရန်</div>
-    <div class="amt-box">
-      <div class="amt-lbl">ကျသင့်ငွေ</div>
-      <div class="amt-val" id="vip-modal-price">5,000 ကျပ်</div>
+    <div class="input-group">
+      <label class="input-label">ငွေပမာဏ (ကျပ်)</label>
+      <input class="input-field" type="number" id="topup-amount-input" placeholder="ဥပမာ: 5000" min="1000" />
     </div>
-    <div style="font-size:12.5px;font-weight:700;color:var(--t1);margin-bottom:10px;font-family:'Noto Sans Myanmar',sans-serif">📱 ငွေမလုံပါက ငွေလွှဲပြီး Confirm နှိပ်ပါ</div>
-    <div class="pay-card">
-      <div>
-        <div class="pay-name"><i class="fa-solid fa-mobile-screen" style="color:#00b4d8"></i>KPay</div>
-        <div class="pay-number">09783646736</div>
-        <div class="pay-owner">Name: Yee Mon Naing</div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:10px;font-family:'Noto Sans Myanmar',sans-serif;">
+      📱 အောက်ပါ နံပါတ်တွေသို့ ငွေလွှဲပါ
+    </div>
+
+    <div class="payment-method-card">
+      <div class="payment-method-info">
+        <div class="payment-method-name">
+          <i class="fa-solid fa-mobile-screen" style="color:#00b4d8"></i> KPay
+        </div>
+        <div class="payment-method-number">09783646736</div>
+        <div class="payment-method-owner">Name: Yee Mon Naing</div>
       </div>
-      <button class="btn-sm btn-sm-copy" onclick="copyText('09783646736',this)"><i class="fa-solid fa-copy"></i> Copy</button>
+      <button class="copy-btn" onclick="copyText('09783646736', this)">
+        <i class="fa-solid fa-copy"></i> Copy
+      </button>
     </div>
-    <div class="pay-card">
-      <div>
-        <div class="pay-name"><i class="fa-solid fa-wave-square" style="color:#9b59b6"></i>Wave</div>
-        <div class="pay-number">09790611406</div>
-        <div class="pay-owner">Name: Aye Thandar</div>
+
+    <div class="payment-method-card">
+      <div class="payment-method-info">
+        <div class="payment-method-name">
+          <i class="fa-solid fa-wave-square" style="color:#7209b7"></i> Wave
+        </div>
+        <div class="payment-method-number">09790611406</div>
+        <div class="payment-method-owner">Name: Aye Thandar</div>
       </div>
-      <button class="btn-sm btn-sm-copy" onclick="copyText('09790611406',this)"><i class="fa-solid fa-copy"></i> Copy</button>
+      <button class="copy-btn" onclick="copyText('09790611406', this)">
+        <i class="fa-solid fa-copy"></i> Copy
+      </button>
     </div>
-    <div class="steps-box">
-      <div class="step-row"><div class="step-num">1</div>Balance မလုံပါက ငွေလွှဲပြီး Admin ထံ အသိပေးပါ</div>
-      <div class="step-row"><div class="step-num">2</div>Admin မှ Balance ဖြည့်ပေးပြီးမှ ဒီ Confirm ကို နှိပ်ပါ</div>
+
+    <div class="payment-steps">
+      <div class="payment-step">
+        <div class="payment-step-num">1</div>
+        <span>အထက်ပါ KPay သို့မဟုတ် Wave နံပါတ်သို့ ငွေလွှဲပါ</span>
+      </div>
+      <div class="payment-step">
+        <div class="payment-step-num">2</div>
+        <span>ငွေပမာဏ ဖြည့်ပြီး "အတည်ပြုမည်" ခလုတ်နှိပ်ပါ</span>
+      </div>
+      <div class="payment-step">
+        <div class="payment-step-num">3</div>
+        <span>Admin မှ စစ်ဆေးပြီး ၁-၂ နာရီအတွင်း Balance ဖြည့်ပေးပါမည်</span>
+      </div>
     </div>
-    <button class="btn btn-primary" onclick="confirmVIPBuy()"><i class="fa-solid fa-check-circle"></i>VIP ဝယ်ယူ အတည်ပြုမည်</button>
-    <button class="modal-close" onclick="closeModal('modal-vip')">ပြန်သွားမည်</button>
+
+    <button class="confirm-btn" onclick="confirmTopup()">
+      <i class="fa-solid fa-check-circle"></i> ငွေလွှဲပြီး အတည်ပြုမည်
+    </button>
+    <button class="modal-close-btn" onclick="closeModal('topup-modal')">ပြန်သွားမည်</button>
   </div>
 </div>
 
 <!-- ===== WITHDRAW MODAL ===== -->
-<div class="modal-overlay" id="modal-withdraw">
+<div class="modal-overlay" id="withdraw-modal">
   <div class="modal-sheet">
     <div class="modal-drag"></div>
-    <div class="modal-title"><i class="fa-solid fa-money-bill-transfer"></i>ပိုက်ဆံထုတ်ရန်</div>
-    <div class="amt-box">
-      <div class="amt-lbl">လက်ကျန်ငွေ</div>
-      <div class="amt-val" id="wd-balance">0 ကျပ်</div>
+    <div class="modal-title"><i class="fa-solid fa-money-bill-transfer"></i> ပိုက်ဆံထုတ်ရန်</div>
+
+    <div class="payment-amount-display">
+      <div class="payment-amount-label">လက်ကျန်ငွေ</div>
+      <div class="payment-amount-value"><span id="withdraw-balance">0</span> ကျပ်</div>
     </div>
+
     <div class="input-group">
-      <label class="input-lbl">ထုတ်ယူမည့် ပမာဏ (ကျပ်)</label>
-      <input class="input-field" type="number" id="wd-amount" placeholder="အနည်းဆုံး ၅,၀၀၀ ကျပ်" min="5000"/>
+      <label class="input-label">ထုတ်ယူမည့် ပမာဏ (ကျပ်)</label>
+      <input class="input-field" type="number" id="withdraw-amount" placeholder="အနည်းဆုံး ၅,၀၀၀ ကျပ်" min="5000" />
     </div>
+
     <div class="input-group">
-      <label class="input-lbl">Method</label>
-      <select class="input-select" id="wd-method"><option value="KPay">KPay</option><option value="Wave">Wave</option></select>
+      <label class="input-label">ငွေလက်ခံမည့် Method</label>
+      <select class="input-select" id="withdraw-method">
+        <option value="KPay">KPay</option>
+        <option value="Wave">Wave</option>
+      </select>
     </div>
+
     <div class="input-group">
-      <label class="input-lbl">ဖုန်းနံပါတ်</label>
-      <input class="input-field" type="text" id="wd-account" placeholder="09xxxxxxxxx"/>
+      <label class="input-label">ဖုန်းနံပါတ် / အကောင့်</label>
+      <input class="input-field" type="text" id="withdraw-account" placeholder="09xxxxxxxxx" />
     </div>
-    <div class="steps-box">
-      <div class="step-row"><div class="step-num">!</div>Admin စစ်ဆေးပြီး ၂–၂၄ နာရီအတွင်း လွှဲပေးမည်</div>
+
+    <div class="payment-steps">
+      <div class="payment-step">
+        <div class="payment-step-num">!</div>
+        <span>ငွေထုတ်တောင်းဆိုမှုသည် Admin စစ်ဆေးမှုပြီးမှ ၂-၂၄ နာရီအတွင်း လုပ်ဆောင်ပေးမည်</span>
+      </div>
     </div>
-    <button class="btn btn-primary" onclick="confirmWithdraw()"><i class="fa-solid fa-paper-plane"></i>တောင်းဆိုချက် ပေးပို့မည်</button>
-    <button class="modal-close" onclick="closeModal('modal-withdraw')">ပြန်သွားမည်</button>
+
+    <button class="confirm-btn" onclick="confirmWithdraw()">
+      <i class="fa-solid fa-paper-plane"></i> တောင်းဆိုချက် ပေးပို့မည်
+    </button>
+    <button class="modal-close-btn" onclick="closeModal('withdraw-modal')">ပြန်သွားမည်</button>
   </div>
 </div>
 
-<!-- =============================================
-   JAVASCRIPT
-============================================= -->
 <script>
-const BACKEND   = "https://ponzibackend.onrender.com";
-const BOT_USER  = "wealthflowmyanmar_bot";
+// ================================================
+//   Best Buy Mini App - Frontend v4
+//   Backend URL: https://ponzibackend.onrender.com
+//   Features: Instant VIP buy, DOM update,
+//             Product gallery by VIP level,
+//             Access control, Error toasts
+// ================================================
 
-// ── App State ─────────────────────────────────────
-const S = {
-  id: null, username: "", first_name: "",
-  balance: 0, commission: 0, vip_level: 0,
-  daily_orders: 0, referral_link: "",
-  history: [],
-  pendingProduct: null,
+const BACKEND_URL  = "https://ponzibackend.onrender.com";
+const BOT_USERNAME = "wealthflowmyanmar_bot";
+
+// ── VIP product image ranges ──────────────────────
+// VIP-1: p1.png → p5.png   (5 products)
+// VIP-2: p1.png → p15.png  (all 15 products)
+const VIP_IMAGES = {
+  1: [1,2,3,4,5],
+  2: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
 };
 
-let pendingVipLevel = 1;
+// ── App State ────────────────────────────────────
+let state = {
+  telegram_id:        null,
+  username:           "Guest",
+  first_name:         "Guest",
+  balance:            0,
+  commission:         0,
+  vip_level:          0,
+  daily_orders:       0,
+  referral_link:      "",
+  pendingProduct:     null,
+  commissionHistory:  [],
+};
 
-// =============================================
+// ================================================
 //   INIT
-// =============================================
+// ================================================
 document.addEventListener("DOMContentLoaded", async () => {
   const tg = window.Telegram?.WebApp;
-  if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor?.("#0d0f1a"); }
+  if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor("#1a0533"); }
 
   const user = tg?.initDataUnsafe?.user;
 
   if (user) {
-    S.id         = user.id;
-    S.username   = user.username   || user.first_name || "User";
-    S.first_name = user.first_name || "မိတ်ဆွေ";
-    const uid4 = String(user.id).slice(-4);
+    state.telegram_id = user.id;
+    state.username    = user.username   || user.first_name || "User";
+    state.first_name  = user.first_name || "မိတ်ဆွေ";
 
-    document.getElementById("u-name").textContent   = user.username ? "@"+user.username : user.first_name;
-    document.getElementById("u-avatar").textContent = (user.first_name||"U")[0].toUpperCase();
-    document.getElementById("p-name").textContent   = (user.first_name||"")+" "+(user.last_name||"");
-    document.getElementById("p-uid").textContent    = "ID: ****"+uid4;
-    S.referral_link = `https://t.me/${BOT_USER}?start=ref_${user.id}`;
-    document.getElementById("ref-link").textContent = S.referral_link;
+    document.getElementById("username-display").textContent =
+      user.username ? "@" + user.username : user.first_name;
 
-    const urlRef = new URLSearchParams(location.search).get("ref");
+    const uid = String(user.id);
+    document.getElementById("account-id").textContent  = "****" + uid.slice(-4);
+    document.getElementById("profile-id").textContent  = "ID: ****" + uid.slice(-4);
+    document.getElementById("profile-name").textContent =
+      (user.first_name || "") + " " + (user.last_name || "");
+
+    const refLink = `https://t.me/${BOT_USERNAME}?start=ref_${user.id}`;
+    state.referral_link = refLink;
+    document.getElementById("referral-link").textContent = refLink;
+
+    const urlRef = new URLSearchParams(window.location.search).get("ref");
     await registerUser(user, urlRef);
-    await loadUser();
+    await loadBalance();
   } else {
     // Dev fallback
-    S.id = 12345678; S.username = "DevMode";
-    document.getElementById("u-name").textContent = "DevMode";
-    document.getElementById("u-avatar").textContent = "D";
-    document.getElementById("p-name").textContent = "Dev Mode";
-    document.getElementById("p-uid").textContent = "ID: ****5678";
-    S.referral_link = `https://t.me/${BOT_USER}?start=ref_12345678`;
-    document.getElementById("ref-link").textContent = S.referral_link;
+    state.telegram_id = 12345678;
+    state.username    = "DevMode";
+    state.balance     = 99999; // dev: pre-fund for testing
+    document.getElementById("username-display").textContent = "DevMode";
+    document.getElementById("account-id").textContent  = "****5678";
+    document.getElementById("profile-id").textContent  = "ID: ****5678";
+    document.getElementById("profile-name").textContent = "Dev Mode User";
+    const refLink = `https://t.me/${BOT_USERNAME}?start=ref_12345678`;
+    state.referral_link = refLink;
+    document.getElementById("referral-link").textContent = refLink;
   }
 
-  renderUI();
+  animateMenuItems();
+  updateUI();
 });
 
-// =============================================
-//   API CALLS
-// =============================================
+// ================================================
+//   REGISTER & LOAD
+// ================================================
 async function registerUser(user, ref) {
   try {
-    const r = await fetch(BACKEND+"/api/user/register", {
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ telegram_id: user.id, username: user.username||"", first_name: user.first_name||"", last_name: user.last_name||"", ref: ref||null }),
+    const res  = await fetch(BACKEND_URL + "/api/user/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        telegram_id: user.id,
+        username:    user.username   || "",
+        first_name:  user.first_name || "",
+        last_name:   user.last_name  || "",
+        ref:         ref || null,
+      }),
     });
-    const d = await r.json();
-    if (d.user) applyUser(d.user);
-  } catch(e) { console.warn("register:", e.message); }
+    const data = await res.json();
+    if (data.user) applyUserData(data.user);
+  } catch (err) {
+    console.warn("Backend:", err.message);
+  }
 }
 
-async function loadUser() {
-  if (!S.id) return;
+async function loadBalance() {
+  if (!state.telegram_id) return;
   try {
-    const r = await fetch(`${BACKEND}/api/user/${S.id}`);
-    const d = await r.json();
-    if (d.user) applyUser(d.user);
-  } catch(e) { console.warn("loadUser:", e.message); }
+    const res  = await fetch(`${BACKEND_URL}/api/user/${state.telegram_id}`);
+    const data = await res.json();
+    if (data.user) applyUserData(data.user);
+  } catch (err) {
+    console.warn("Load balance:", err.message);
+  }
 }
 
-function applyUser(u) {
-  S.balance      = u.balance      || 0;
-  S.commission   = u.commission   || 0;
-  S.vip_level    = u.vip_level    || 0;
-  S.daily_orders = u.daily_orders || 0;
-  renderUI();
+function applyUserData(user) {
+  state.balance      = user.balance      || 0;
+  state.commission   = user.commission   || 0;
+  state.vip_level    = user.vip_level    || 0;
+  state.daily_orders = user.daily_orders || 0;
+  updateUI();
 }
 
-// =============================================
-//   RENDER UI  ← single source of truth
-// =============================================
-function renderUI() {
-  // Header balance
-  document.getElementById("h-balance").textContent    = S.balance.toLocaleString()+" ကျပ်";
-  document.getElementById("h-commission").textContent = S.commission.toLocaleString()+" ကျပ်";
+// ================================================
+//   UI UPDATE  (called after every state change)
+// ================================================
+function updateUI() {
+  // ── Balance displays ──
+  document.getElementById("balance-display").textContent    = state.balance.toLocaleString();
+  document.getElementById("commission-display").textContent = state.commission.toLocaleString();
+  document.getElementById("stat-balance").textContent       = state.balance.toLocaleString();
+  document.getElementById("stat-commission").textContent    = state.commission.toLocaleString();
+  document.getElementById("stat-vip").textContent           = state.vip_level ? `VIP-${state.vip_level}` : "မရှိ";
+  document.getElementById("stat-orders").textContent        = state.daily_orders;
+  document.getElementById("withdraw-balance").textContent   = state.balance.toLocaleString();
 
-  // VIP pill in header
-  const pill = document.getElementById("h-vip");
-  if (S.vip_level === 0) { pill.textContent="မဝယ်ရသေး"; pill.className="vip-pill none"; }
-  else if (S.vip_level === 1) { pill.textContent="⭐ VIP-1"; pill.className="vip-pill lv1"; }
-  else { pill.textContent="👑 VIP-2"; pill.className="vip-pill lv2"; }
+  // ── Daily counter ──
+  const limit = state.vip_level === 1 ? 10 : state.vip_level === 2 ? 20 : 0;
+  document.getElementById("daily-count").textContent     = state.daily_orders;
+  document.getElementById("daily-max").textContent       = limit || "0";
+  document.getElementById("daily-limit-text").textContent =
+    state.vip_level
+      ? `VIP-${state.vip_level} (နေ့စဉ် ${limit} ကြိမ်)`
+      : "VIP ဝယ်ယူပြီးမှ Grab လုပ်နိုင်သည်";
 
-  // Profile stats
-  document.getElementById("s-balance").textContent    = S.balance.toLocaleString();
-  document.getElementById("s-commission").textContent = S.commission.toLocaleString();
-  document.getElementById("s-vip").textContent        = S.vip_level ? `VIP-${S.vip_level}` : "မဝယ်ရသေး";
-  document.getElementById("s-orders").textContent     = S.daily_orders;
+  // ── Hero VIP badge ──
+  if (state.vip_level > 0) {
+    document.getElementById("vip-badge-hero").style.display = "flex";
+    document.getElementById("vip-badge-text").textContent   = `VIP-${state.vip_level}`;
+  } else {
+    document.getElementById("vip-badge-hero").style.display = "none";
+  }
 
-  // Withdraw modal balance
-  document.getElementById("wd-balance").textContent   = S.balance.toLocaleString()+" ကျပ်";
-
-  // Daily counter
-  const limit = S.vip_level===1 ? 10 : S.vip_level===2 ? 20 : 0;
-  document.getElementById("daily-count").textContent  = S.daily_orders;
-  document.getElementById("daily-max").textContent    = limit || "—";
-  document.getElementById("daily-lbl").textContent    = S.vip_level ? `VIP-${S.vip_level} · ${limit} ကြိမ်/နေ့` : "VIP လိုအပ်သည်";
-
-  // VIP buttons state
+  // ── VIP buttons state ──
   updateVIPButtons();
 
-  // Order screen locked/unlocked
-  renderOrderScreen();
-
-  // Products grid
-  renderProductsGrid();
+  // ── Cart tab: show lock notice or product gallery ──
+  updateCartSection();
 }
 
+// ─── VIP Buttons ────────────────────────────────
 function updateVIPButtons() {
-  const b1 = document.getElementById("vip1-btn");
-  const b2 = document.getElementById("vip2-btn");
-  if (S.vip_level >= 1) { b1.textContent="✅ VIP-1 ပိုင်ဆိုင်ပြီး"; b1.classList.add("owned"); }
-  else                  { b1.textContent="💳 VIP-1 ဝယ်မည် (5,000 ကျပ်)"; b1.classList.remove("owned"); }
-  if (S.vip_level >= 2) { b2.textContent="✅ VIP-2 ပိုင်ဆိုင်ပြီး"; b2.classList.add("owned"); }
-  else                  { b2.textContent="💳 VIP-2 ဝယ်မည် (50,000 ကျပ်)"; b2.classList.remove("owned"); }
-}
+  const btn1 = document.getElementById("vip1-btn");
+  const btn2 = document.getElementById("vip2-btn");
 
-function renderOrderScreen() {
-  const locked = document.getElementById("locked-view");
-  const active = document.getElementById("active-order-view");
-  if (S.vip_level > 0) {
-    locked.style.display = "none";
-    active.style.display = "flex";
+  if (state.vip_level >= 1) {
+    btn1.innerHTML = "<i class='fa-solid fa-check'></i> VIP-1 ပိုင်ဆိုင်ပြီး";
+    btn1.classList.add("owned");
+    btn1.disabled = true;
+    hideInsufficientCard(1);
   } else {
-    locked.style.display = "block";
-    active.style.display = "none";
+    btn1.innerHTML = "💳 VIP-1 ဝယ်မည် (5,000 ကျပ်)";
+    btn1.classList.remove("owned");
+    btn1.disabled = false;
+  }
+
+  if (state.vip_level >= 2) {
+    btn2.innerHTML = "<i class='fa-solid fa-check'></i> VIP-2 ပိုင်ဆိုင်ပြီး";
+    btn2.classList.add("owned");
+    btn2.disabled = true;
+    hideInsufficientCard(2);
+  } else {
+    btn2.innerHTML = "💳 VIP-2 ဝယ်မည် (50,000 ကျပ်)";
+    btn2.classList.remove("owned");
+    btn2.disabled = false;
   }
 }
 
-function renderProductsGrid() {
-  const grid = document.getElementById("products-grid");
-  if (S.vip_level === 0) { grid.innerHTML=""; return; }
-  const max = S.vip_level === 1 ? 5 : 15;
-  let html = "";
-  for (let i = 1; i <= max; i++) {
-    html += `
-      <div class="product-card">
-        <img class="product-img" src="/images/p${i}.png" alt="p${i}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23252840%22 width=%22100%22 height=%22100%22/><text y=%2250%25%22 x=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2224%22>📦</text></svg>'"/>
-        <div class="product-info">
-          <div class="product-price">LV${i<=5?1:2}</div>
-          <div class="product-comm">10% Commission</div>
-        </div>
-      </div>`;
+// ─── Cart Section: lock vs gallery ──────────────
+function updateCartSection() {
+  const lockEl    = document.getElementById("vip-lock-notice");
+  const galleryEl = document.getElementById("vip-products-section");
+
+  if (state.vip_level === 0) {
+    lockEl.classList.add("show");
+    galleryEl.classList.remove("show");
+  } else {
+    lockEl.classList.remove("show");
+    galleryEl.classList.add("show");
+    renderProductGallery(state.vip_level);
   }
-  grid.innerHTML = html;
 }
 
-// =============================================
+// ─── Render product image gallery ───────────────
+function renderProductGallery(vipLevel) {
+  const badgeEl  = document.getElementById("gallery-vip-badge");
+  const textEl   = document.getElementById("gallery-vip-text");
+  const titleEl  = document.getElementById("gallery-title");
+  const gridEl   = document.getElementById("products-grid");
+
+  badgeEl.textContent = `VIP-${vipLevel}`;
+  titleEl.textContent = `VIP-${vipLevel} ပစ္စည်းများ`;
+
+  if (vipLevel === 1) {
+    textEl.textContent = "VIP-1 ပစ္စည်း p1–p5 Grab လုပ်နိုင်သည်";
+  } else {
+    textEl.textContent = "VIP-2 ပစ္စည်း p1–p15 အားလုံး Grab လုပ်နိုင်သည်";
+  }
+
+  const imgNums = VIP_IMAGES[vipLevel] || VIP_IMAGES[1];
+
+  gridEl.innerHTML = imgNums.map(n => `
+    <div class="product-card">
+      <img
+        src="images/p${n}.png"
+        alt="Product ${n}"
+        loading="lazy"
+        onerror="this.src='https://via.placeholder.com/200x200/fce4ec/e91e63?text=P${n}'"
+      />
+      <div class="product-card-info">
+        <div class="product-card-id">P${n}</div>
+        <div class="product-card-label">Order Grab ပစ္စည်း</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// ================================================
+//   NAVIGATION
+// ================================================
+function navTo(tab, el) {
+  document.querySelectorAll(".tab-screen").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+
+  document.getElementById(`tab-${tab}`).classList.add("active");
+  if (el) {
+    el.classList.add("active");
+  } else {
+    const tabIdx = { home: 0, cart: 1, vip: 2, profile: 3 };
+    if (tabIdx[tab] !== undefined) {
+      document.querySelectorAll(".nav-item")[tabIdx[tab]].classList.add("active");
+    }
+  }
+
+  window.Telegram?.WebApp?.HapticFeedback?.selectionChanged();
+}
+
+// ================================================
 //   ORDER GRAB
-// =============================================
+// ================================================
 let pendingOrder = null;
 
 async function grabOrder() {
-  if (!S.id) return toast("⚠️ Telegram မှ ဝင်ရောက်ပါ","error");
-  if (!S.vip_level) return toast("⚠️ VIP ဝယ်ယူမှသာ Grab လုပ်နိုင်သည်","error");
+  if (!state.telegram_id)  return showToast("⚠️ Telegram မှ ဝင်ရောက်ပါ", "error");
+  if (!state.vip_level)    return showToast("⚠️ VIP ဝယ်ယူမှသာ Order Grab လုပ်နိုင်သည်", "error");
 
   const btn = document.getElementById("grab-btn");
-  btn.disabled = true;
+  btn.disabled  = true;
   btn.innerHTML = `<span class="spinner"></span> ရှာဖွေနေသည်...`;
 
   try {
-    const r = await fetch(BACKEND+"/api/order/grab",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ telegram_id: S.id }),
+    const res  = await fetch(BACKEND_URL + "/api/order/grab", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ telegram_id: state.telegram_id }),
     });
-    const d = await r.json();
+    const data = await res.json();
 
-    if (!d.success) {
-      toast(d.error || "⚠️ Grab မအောင်မြင်ပါ","error");
-    } else {
-      pendingOrder = d;
-      const p = d.product;
-      document.getElementById("result-img").src      = p.image;
-      document.getElementById("result-price").textContent = p.price.toLocaleString()+" ကျပ်";
-      document.getElementById("result-comm").textContent  = `+ Commission: ${d.commission.toLocaleString()} ကျပ် (10%)`;
-      document.getElementById("order-result").classList.add("show");
-      window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("medium");
+    if (!data.success) {
+      showToast(data.error || "⚠️ Order Grab မအောင်မြင်ပါ", "error");
+      btn.disabled  = false;
+      btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Order Grab လုပ်ရန်`;
+      return;
     }
-  } catch(e) { toast("⚠️ ဆာဗာချိတ်ဆက်မရပါ","error"); }
 
-  btn.disabled = false;
-  btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Order Grab လုပ်မည်`;
+    pendingOrder = data;
+    const prod   = data.product;
+
+    // Use local image path matching p1.png pattern
+    const imgNum = prod.id.replace("p", "");
+    document.getElementById("order-img").src              = `images/p${imgNum}.png`;
+    document.getElementById("order-price").textContent    = prod.price.toLocaleString();
+    document.getElementById("order-commission").textContent = data.commission.toLocaleString();
+
+    document.getElementById("order-result").classList.add("show");
+    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("medium");
+
+  } catch (err) {
+    showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
+  }
+
+  btn.disabled  = false;
+  btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Order Grab လုပ်ရန်`;
 }
 
 function submitOrder() {
   if (!pendingOrder) return;
-  S.balance      = pendingOrder.new_balance;
-  S.daily_orders = pendingOrder.daily_orders;
-  S.commission  += pendingOrder.commission;
 
-  // Add to history
-  S.history.unshift({ id: pendingOrder.product.id.toUpperCase(), amount: pendingOrder.commission, date: new Date().toLocaleTimeString("my-MM") });
-  renderHistory();
-  renderUI();
+  const commission = pendingOrder.commission;
+
+  state.balance      = pendingOrder.new_balance;
+  state.daily_orders = pendingOrder.daily_orders;
+  state.commission  += commission;
+
+  const now = new Date();
+  state.commissionHistory.unshift({
+    product: pendingOrder.product.id,
+    amount:  commission,
+    date:    now.toLocaleString("my-MM"),
+  });
+
+  updateUI();
+  updateHistory();
 
   document.getElementById("order-result").classList.remove("show");
   pendingOrder = null;
-  toast("🎉 အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်!","success");
+
+  showToast(`🎉 အော်ဒါတင်ခြင်း အောင်မြင်! Commission +${commission.toLocaleString()} ကျပ်`, "success");
   window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("success");
 }
 
-function renderHistory() {
-  if (!S.history.length) return;
-  const colors = ["var(--accent)","var(--accent2)","var(--green)","var(--yellow)","#f953c6"];
-  document.getElementById("history-list").innerHTML = S.history.slice(0,6).map((h,i)=>`
-    <div class="history-row">
+function updateHistory() {
+  if (state.commissionHistory.length === 0) return;
+  const colors = ["var(--pink-accent)", "#3b82f6", "#8b5cf6", "#f59e0b", "#10b981"];
+  const html = state.commissionHistory.slice(0, 5).map((h, i) => `
+    <div class="history-item">
       <div class="history-left">
-        <div class="h-dot" style="background:${colors[i%colors.length]}"></div>
-        <div><div class="h-id">${h.id}</div><div class="h-date">${h.date}</div></div>
+        <div class="history-dot" style="background:${colors[i % colors.length]}"></div>
+        <div class="history-info">
+          <span class="history-id">${h.product.toUpperCase()}</span>
+          <span class="history-date">${h.date}</span>
+        </div>
       </div>
-      <span class="h-amt">+${h.amount.toLocaleString()} ကျပ်</span>
-    </div>`).join("");
+      <span class="history-amount">+${h.amount.toLocaleString()} ကျပ်</span>
+    </div>
+  `).join("");
+  document.getElementById("history-list").innerHTML = html;
 }
 
-// =============================================
-//   VIP BUY
-// =============================================
-function buyVIP(level) {
-  if (S.vip_level >= level) return toast(`✅ VIP-${level} ပိုင်ဆိုင်ပြီး ဖြစ်သည်`,"success");
-  pendingVipLevel = level;
-  document.getElementById("vip-modal-lv").textContent    = level;
-  document.getElementById("vip-modal-price").textContent = level===1 ? "5,000 ကျပ်" : "50,000 ကျပ်";
-  openModal("modal-vip");
-}
+// ================================================
+//   VIP – INSTANT PURCHASE
+//   Calls /api/buy-vip → deducts balance → updates DOM
+// ================================================
+async function buyVIP(level) {
+  // Already owns
+  if (state.vip_level >= level) {
+    return showToast(`✅ VIP-${level} ပိုင်ဆိုင်ပြီး ဖြစ်သည်`, "success");
+  }
 
-async function confirmVIPBuy() {
-  toast("⏳ စစ်ဆေးနေသည်...");
+  if (!state.telegram_id) {
+    return showToast("⚠️ Telegram မှ ဝင်ရောက်ပါ", "error");
+  }
+
+  const cost    = level === 1 ? 5000 : 50000;
+  const btnId   = `vip${level}-btn`;
+  const btn     = document.getElementById(btnId);
+  const origTxt = btn.innerHTML;
+
+  btn.disabled  = true;
+  btn.innerHTML = `<span class="spinner"></span> ဝယ်ယူနေသည်...`;
+  hideInsufficientCard(level);
+
   try {
-    const r = await fetch(BACKEND+"/api/buy-vip",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ telegram_id: S.id, vip_level: pendingVipLevel }),
+    const res  = await fetch(BACKEND_URL + "/api/buy-vip", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ telegram_id: state.telegram_id, vip_level: level }),
     });
-    const d = await r.json();
+    const data = await res.json();
 
-    if (d.success) {
-      // ── INSTANT DOM UPDATE ──────────────────────
-      S.balance   = d.new_balance;
-      S.vip_level = d.vip_level;
-      closeModal("modal-vip");
-      renderUI();   // updates all sections immediately, no refresh needed
-      toast(`🎉 VIP-${pendingVipLevel} ရရှိပြီ! Order Grab စလုပ်နိုင်ပြီ`,"success");
-      // Auto-switch to order tab
-      setTimeout(()=> switchTab("order", document.querySelectorAll(".tab-btn")[1]), 1200);
+    if (data.success) {
+      // ── Instant DOM Update ──
+      state.balance   = data.new_balance;
+      state.vip_level = data.vip_level;
+      updateUI();
+
+      // Show gallery immediately
+      updateCartSection();
+
+      showToast(`🎉 VIP-${level} ရရှိပြီ! Order Grab လုပ်နိုင်ပါပြီ`, "success");
       window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred("success");
-    } else {
-      closeModal("modal-vip");
-      // Not enough balance → send deposit request and notify admin
-      const cost = pendingVipLevel===1 ? 5000 : 50000;
-      await fetch(BACKEND+"/api/deposit/request",{
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ telegram_id: S.id, amount: cost, method: `VIP-${pendingVipLevel} Purchase` }),
-      }).catch(()=>{});
-      toast("⚠️ "+d.error,"error");
+      return;
     }
-  } catch(e) { toast("⚠️ ဆာဗာချိတ်ဆက်မရပါ","error"); }
+
+    // ── Insufficient balance ──
+    if (data.insufficient) {
+      showInsufficientCard(level, data.current_balance, cost);
+      showToast("❌ လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ ငွေဖြည့်ပါ", "error");
+    } else {
+      showToast(data.error || "⚠️ မအောင်မြင်ပါ", "error");
+    }
+
+  } catch (err) {
+    showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
+  }
+
+  btn.disabled  = false;
+  btn.innerHTML = origTxt;
 }
 
-// =============================================
+// ── Show/hide insufficient balance notice ─────────
+function showInsufficientCard(level, currentBalance, cost) {
+  const card = document.getElementById(`vip${level}-insufficient`);
+  const desc = document.getElementById(`vip${level}-insufficient-desc`);
+  const shortfall = cost - currentBalance;
+  desc.innerHTML =
+    `လက်ကျန်ငွေ: <strong>${currentBalance.toLocaleString()} ကျပ်</strong><br>` +
+    `လိုအပ်သည်: <strong>${cost.toLocaleString()} ကျပ်</strong><br>` +
+    `နောက်ထပ် <strong style="color:var(--red)">${shortfall.toLocaleString()} ကျပ်</strong> ဖြည့်ပါ`;
+  card.classList.add("show");
+}
+
+function hideInsufficientCard(level) {
+  document.getElementById(`vip${level}-insufficient`).classList.remove("show");
+}
+
+function closeVIPInsufficient(level) {
+  hideInsufficientCard(level);
+}
+
+// ================================================
 //   TOPUP
-// =============================================
+// ================================================
 function openTopup() {
-  document.getElementById("topup-amount").value = "";
-  openModal("modal-topup");
+  document.getElementById("topup-amount-input").value = "";
+  openModal("topup-modal");
 }
 
 async function confirmTopup() {
-  const amount = parseInt(document.getElementById("topup-amount").value);
-  if (!amount || amount < 1000) return toast("⚠️ အနည်းဆုံး ၁,၀၀၀ ကျပ် ထည့်ပါ","error");
+  const amount = parseInt(document.getElementById("topup-amount-input").value);
+  if (!amount || amount < 1000) {
+    return showToast("⚠️ အနည်းဆုံး ၁,၀၀၀ ကျပ် ထည့်ပါ", "error");
+  }
+
   try {
-    await fetch(BACKEND+"/api/deposit/request",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ telegram_id: S.id, amount, method: "KPay/Wave" }),
+    await fetch(BACKEND_URL + "/api/deposit/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ telegram_id: state.telegram_id, amount, method: "KPay/Wave" }),
     });
-    closeModal("modal-topup");
-    toast("📨 ငွေဖြည့်တောင်းဆိုမှု ပေးပို့ပြီး! Admin မှ ၁–၂ နာရီအတွင်း ဖြည့်ပေးမည်","success");
-  } catch(e) { toast("⚠️ ဆာဗာချိတ်ဆက်မရပါ","error"); }
+    closeModal("topup-modal");
+    showToast("📨 ငွေဖြည့်တောင်းဆိုမှု ပေးပို့ပြီး! Admin မှ ၁-၂ နာရီအတွင်း ဖြည့်ပေးမည်", "success");
+  } catch (err) {
+    showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
+  }
 }
 
-// =============================================
+// ================================================
 //   WITHDRAW
-// =============================================
+// ================================================
 function openWithdraw() {
-  document.getElementById("wd-balance").textContent = S.balance.toLocaleString()+" ကျပ်";
-  document.getElementById("wd-amount").value = "";
-  document.getElementById("wd-account").value = "";
-  openModal("modal-withdraw");
+  document.getElementById("withdraw-balance").textContent = state.balance.toLocaleString();
+  openModal("withdraw-modal");
 }
 
 async function confirmWithdraw() {
-  const amount  = parseInt(document.getElementById("wd-amount").value);
-  const method  = document.getElementById("wd-method").value;
-  const account = document.getElementById("wd-account").value.trim();
-  if (!amount || amount < 5000) return toast("⚠️ အနည်းဆုံး ၅,၀၀၀ ကျပ် ထုတ်နိုင်သည်","error");
-  if (amount > S.balance)       return toast("⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ","error");
-  if (!account)                 return toast("⚠️ ဖုန်းနံပါတ် ထည့်ပါ","error");
+  const amount  = parseInt(document.getElementById("withdraw-amount").value);
+  const method  = document.getElementById("withdraw-method").value;
+  const account = document.getElementById("withdraw-account").value.trim();
+
+  if (!amount || amount < 5000) return showToast("⚠️ အနည်းဆုံး ၅,၀၀၀ ကျပ် ထုတ်နိုင်သည်", "error");
+  if (amount > state.balance)   return showToast("⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ", "error");
+  if (!account) return showToast("⚠️ ဖုန်းနံပါတ် ထည့်ပါ", "error");
+
   try {
-    const r = await fetch(BACKEND+"/api/withdraw/request",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ telegram_id: S.id, amount, method, account }),
+    const res  = await fetch(BACKEND_URL + "/api/withdraw/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ telegram_id: state.telegram_id, amount, method, account }),
     });
-    const d = await r.json();
-    if (d.success) { closeModal("modal-withdraw"); toast("📨 ငွေထုတ်တောင်းဆိုမှု ပေးပို့ပြီး!","success"); }
-    else toast("⚠️ "+(d.error||"မအောင်မြင်ပါ"),"error");
-  } catch(e) { toast("⚠️ ဆာဗာချိတ်ဆက်မရပါ","error"); }
+    const data = await res.json();
+    if (data.success) {
+      closeModal("withdraw-modal");
+      showToast("📨 ငွေထုတ်တောင်းဆိုမှု ပေးပို့ပြီး!", "success");
+    } else {
+      showToast(data.error || "⚠️ မအောင်မြင်ပါ", "error");
+    }
+  } catch (err) {
+    showToast("⚠️ ဆာဗာနှင့် ချိတ်ဆက်မရပါ", "error");
+  }
 }
 
-// =============================================
+// ================================================
 //   REFERRAL
-// =============================================
-function copyReferral() { copyText(S.referral_link, document.getElementById("copy-ref-btn")); }
+// ================================================
+function copyReferral() {
+  copyText(state.referral_link, null);
+  showToast("🔗 Referral Link ကူးပြီး!", "success");
+}
+
 function shareReferral() {
   const tg = window.Telegram?.WebApp;
-  if (tg) tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(S.referral_link)}&text=${encodeURIComponent("🛍️ Best Buy Mini App - Commission ၁၀% ရမည်!")}`);
-  else copyReferral();
-}
-
-// =============================================
-//   HELPERS
-// =============================================
-function switchTab(name, el) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.querySelectorAll(".tab-btn, .nav-item").forEach(n => n.classList.remove("active"));
-  document.getElementById("screen-"+name).classList.add("active");
-  // Activate both tab-bar and bottom-nav
-  const idx = {home:0,order:1,vip:2,profile:3}[name];
-  document.querySelectorAll(".tab-btn")[idx]?.classList.add("active");
-  document.querySelectorAll(".nav-item")[idx]?.classList.add("active");
-  window.Telegram?.WebApp?.HapticFeedback?.selectionChanged();
-}
-
-function openModal(id)  { document.getElementById(id).classList.add("show"); document.body.style.overflow="hidden"; }
-function closeModal(id) { document.getElementById(id).classList.remove("show"); document.body.style.overflow=""; }
-document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("click", e => { if(e.target===o) closeModal(o.id); }));
-
-function copyText(txt, btn) {
-  navigator.clipboard?.writeText(txt).catch(()=>{
-    const el=document.createElement("textarea");el.value=txt;document.body.appendChild(el);el.select();document.execCommand("copy");document.body.removeChild(el);
-  });
-  if (btn) {
-    const orig=btn.innerHTML; btn.innerHTML=`<i class="fa-solid fa-check"></i> Copied!`; btn.classList.add("copied");
-    setTimeout(()=>{ btn.innerHTML=orig; btn.classList.remove("copied"); },2000);
+  if (tg) {
+    tg.openTelegramLink(
+      `https://t.me/share/url?url=${encodeURIComponent(state.referral_link)}&text=${encodeURIComponent("🛍️ Best Buy Mini App - Commission ရမည်!")}`
+    );
+  } else {
+    copyReferral();
   }
+}
+
+// ================================================
+//   RULES
+// ================================================
+function showRules() {
+  showToast("📋 Commission 10% • VIP ဝယ်မှ Grab • မိတ်ဆွေဖိတ် ₁,000 Bonus");
+}
+
+// ================================================
+//   MODAL HELPERS
+// ================================================
+function openModal(id) {
+  document.getElementById(id).classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", function(e) {
+    if (e.target === this) closeModal(this.id);
+  });
+});
+
+// ================================================
+//   COPY
+// ================================================
+function copyText(text, btn) {
+  navigator.clipboard?.writeText(text).catch(() => {
+    const el = document.createElement("textarea");
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+  });
+
+  if (btn) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
+    btn.classList.add("copied");
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove("copied");
+    }, 2000);
+  }
+
   window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
 }
 
-let _toastTimer;
-function toast(msg,type=""){
-  const el=document.getElementById("toast");
-  el.textContent=msg; el.className="toast show "+(type||"");
-  clearTimeout(_toastTimer);
-  _toastTimer=setTimeout(()=>el.className="toast",3200);
+// ================================================
+//   TOAST
+// ================================================
+let toastTimer;
+function showToast(msg, type = "") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className   = "toast show " + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = "toast"; }, 3500);
+}
+
+// ================================================
+//   ANIMATE MENU
+// ================================================
+function animateMenuItems() {
+  document.querySelectorAll(".menu-item").forEach((el, i) => {
+    el.style.cssText =
+      `opacity:0;transform:translateY(16px);` +
+      `transition:opacity .35s ease ${i*0.07}s,transform .35s ease ${i*0.07}s`;
+    setTimeout(() => {
+      el.style.opacity   = "1";
+      el.style.transform = "translateY(0)";
+    }, 80 + i * 70);
+  });
 }
 </script>
 </body>
