@@ -982,7 +982,14 @@ async function grabOrder(){
   if(!state.telegram_id) return toast("⚠️ Telegram မှ ဝင်ပါ","error");
   if(!state.vip_level)   return toast("⚠️ VIP ဝယ်ပြီးမှ Grab","error");
   const btn=document.getElementById("grab-btn");
-  hideAlert(); btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> ရှာဖွေနေသည်...`;
+  hideAlert();
+  btn.disabled=true;
+
+  // ── Fix 3: 3-second wait animation ─────────────────────
+  btn.innerHTML=`<span class="spinner"></span> ခေတ္တစောင့်ပါ...`;
+  await new Promise(r => setTimeout(r, 3000));   // 3 sec spinner
+  btn.innerHTML=`<span class="spinner"></span> ရှာဖွေနေသည်...`;
+
   try{
     const r = await fetch(BACKEND+"/api/order/grab",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({telegram_id:state.telegram_id})});
     const d = await r.json();
